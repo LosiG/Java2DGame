@@ -21,9 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
 
-  int playerX = 48;
-  int playerY = 48;
-  int playerSpeed = 4;
+  Player player1 = new Player(tileSize, tileSize, tileSize, tileSize, 3, 1);
+  Player enemy = new Player(300, 300, tileSize, tileSize, 3, 1);
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -40,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 
   @Override
   public void run() {
-    double drawInterval = 1000000000 / FPS;
+    double drawInterval = 1000000000.00 / FPS;
     double nextDrawTime = System.nanoTime() + drawInterval;
     while (gameThread != null) {
       update();
@@ -51,8 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
         double remainingTime = nextDrawTime - System.nanoTime();
         remainingTime = remainingTime / 1000000;
 
-        if(remainingTime<0){
-            remainingTime = 0;
+        if (remainingTime < 0) {
+          remainingTime = 0;
         }
 
         Thread.sleep((long) remainingTime);
@@ -65,28 +64,33 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
-    if (keyH.upPressed) {
-      playerY -= playerSpeed;
+    if (keyH.isUpPressed()) {
+      player1.moveUp();
     }
-    if (keyH.downPressed) {
-      playerY += playerSpeed;
+    if (keyH.isDownPressed()) {
+      player1.moveDown();
     }
-    if (keyH.leftPressed) {
-      playerX -= playerSpeed;
+    if (keyH.isLeftPressed()) {
+      player1.moveLeft();
     }
-    if (keyH.rightPressed) {
-      playerX += playerSpeed;
+    if (keyH.isRightPressed()) {
+      player1.moveRight();
     }
   }
 
+  @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
 
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setColor(Color.white);
+    g2.setColor(Color.GREEN);
 
-    g2.fillRect(playerX, playerY, tileSize, tileSize);
+    g2.fillRect(player1.getCurrentX(), player1.getCurrentY(), player1.getSpriteX(), player1.getSpriteY());
+
+    g2.setColor(Color.RED);
+
+    g2.fillRect(enemy.getCurrentX(), enemy.getCurrentY(), enemy.getSpriteX(), enemy.getSpriteY());
 
     g2.dispose();
   }
