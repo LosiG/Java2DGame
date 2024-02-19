@@ -8,24 +8,24 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
 
-  final Integer originalTileSize = 16;
-  final Integer scale = 3;
-  final Integer tileSize = originalTileSize * scale;
-  final Integer maxScreenColumn = 16;
-  final Integer maxScreenRow = 12;
-  final Integer screenWidth = tileSize * maxScreenColumn;
-  final Integer screenHeight = tileSize * maxScreenRow;
+  static final Integer ORIGINAL_TILESIZE = 16;
+  static final Integer SCALE = 3;
+  static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;
+  static final Integer MAX_SCREEN_COLUMN = 16;
+  static final Integer MAX_SCREEN_ROW = 12;
+  static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
+  static final Integer SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
 
-  int FPS = 60;
+  static final Integer FPS = 60;
 
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
 
-  Player player1 = new Player(tileSize, tileSize, tileSize, tileSize, 3, 1);
-  Player enemy = new Player(300, 300, tileSize, tileSize, 3, 1);
+  Player player1 = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
+  Player enemy = new Player(300, 300, TILE_SIZE, TILE_SIZE, 3, 1);
 
   public GamePanel() {
-    this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+    this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     this.setBackground(Color.BLACK);
     this.setDoubleBuffered(true);
     this.addKeyListener(keyH);
