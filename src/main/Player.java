@@ -1,12 +1,6 @@
 package main;
 
-public class Player {
-    private Integer currentX;
-    private Integer currentY;
-    private Integer spriteY;
-    private Integer spriteX;
-    private Integer speed;
-    private Integer acceleration;
+public class Player extends Entity {
 
     public Player(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
             Integer acceleration) {
@@ -22,68 +16,20 @@ public class Player {
         return this.speed * this.acceleration;
     }
 
-    public void moveUp() {
-        this.currentY -= this.getMovementSpeed();
+    public void moveUp(Integer value) {
+        this.currentY -= value;
     }
 
-    public void moveDown() {
-        this.currentY += this.getMovementSpeed();
+    public void moveDown(Integer value) {
+        this.currentY += value;
     }
 
-    public void moveLeft() {
-        this.currentX -= this.getMovementSpeed();
+    public void moveLeft(Integer value) {
+        this.currentX -= value;
     }
 
-    public void moveRight() {
-        this.currentX += this.getMovementSpeed();
-    }
-
-    public Integer getCurrentX() {
-        return currentX;
-    }
-
-    public Integer getCurrentY() {
-        return currentY;
-    }
-
-    public Integer getSpriteY() {
-        return spriteY;
-    }
-
-    public Integer getSpriteX() {
-        return spriteX;
-    }
-
-    public Integer getSpeed() {
-        return speed;
-    }
-
-    public Integer getAcceleration() {
-        return acceleration;
-    }
-
-    public void setCurrentX(Integer currentX) {
-        this.currentX = currentX;
-    }
-
-    public void setCurrentY(Integer currentY) {
-        this.currentY = currentY;
-    }
-
-    public void setSpriteY(Integer spriteY) {
-        this.spriteY = spriteY;
-    }
-
-    public void setSpriteX(Integer spriteX) {
-        this.spriteX = spriteX;
-    }
-
-    public void setSpeed(Integer speed) {
-        this.speed = speed;
-    }
-
-    public void setAcceleration(Integer acceleration) {
-        this.acceleration = acceleration;
+    public void moveRight(Integer value) {
+        this.currentX += value;
     }
 
     @Override
