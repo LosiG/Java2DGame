@@ -18,11 +18,13 @@ public class GamePanel extends JPanel implements Runnable {
 
   static final Integer FPS = 60;
 
+  boolean pause = false;
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
 
-  Player player1 = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
-  Player enemy = new Player(300, 300, TILE_SIZE, TILE_SIZE, 3, 1);
+  Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
+  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1);
+  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1);
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -64,18 +66,29 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
+
+    if (keyH.isSpacebarPressed()) {
+      pause = !pause;
+    }
+    if (pause) {
+      return;
+    }
+
     if (keyH.isUpPressed()) {
-      player1.moveUp();
+      player.moveUp(player.speed);
     }
     if (keyH.isDownPressed()) {
-      player1.moveDown();
+      player.moveDown(player.speed);
     }
     if (keyH.isLeftPressed()) {
-      player1.moveLeft();
+      player.moveLeft(player.speed);
     }
     if (keyH.isRightPressed()) {
-      player1.moveRight();
+      player.moveRight(player.speed);
     }
+
+    enemy1.moveToPlayer(player.currentX, player.currentY);
+    enemy2.moveToPlayer(player.currentX, player.currentY);
   }
 
   @Override
@@ -84,13 +97,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setColor(Color.GREEN);
+    g2.setColor(Color.MAGENTA);
 
-    g2.fillRect(player1.getCurrentX(), player1.getCurrentY(), player1.getSpriteX(), player1.getSpriteY());
+    g2.fillRect(player.currentX, player.currentY, player.spriteX, player.spriteY);
 
     g2.setColor(Color.RED);
 
-    g2.fillRect(enemy.getCurrentX(), enemy.getCurrentY(), enemy.getSpriteX(), enemy.getSpriteY());
+    g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
+
+    g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
 
     g2.dispose();
   }

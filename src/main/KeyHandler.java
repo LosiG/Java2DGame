@@ -9,6 +9,7 @@ public class KeyHandler implements KeyListener {
   private boolean downPressed;
   private boolean leftPressed;
   private boolean rightPressed;
+  private boolean spaceBarPressed;
 
   public boolean isUpPressed() {
     return upPressed;
@@ -26,15 +27,15 @@ public class KeyHandler implements KeyListener {
     return rightPressed;
   }
 
-  @Override
-  public void keyTyped(KeyEvent e) {
-    throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+  public boolean isSpacebarPressed() {
+    return spaceBarPressed;
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
     int code = e.getKeyCode();
     switch (code) {
+      case KeyEvent.VK_SPACE -> spaceBarPressed = true;
       case KeyEvent.VK_W, KeyEvent.VK_UP -> upPressed = true;
       case KeyEvent.VK_S, KeyEvent.VK_DOWN -> downPressed = true;
       case KeyEvent.VK_A, KeyEvent.VK_LEFT -> leftPressed = true;
@@ -46,10 +47,16 @@ public class KeyHandler implements KeyListener {
   public void keyReleased(KeyEvent e) {
     int code = e.getKeyCode();
     switch (code) {
+      case KeyEvent.VK_SPACE -> spaceBarPressed = false;
       case KeyEvent.VK_W, KeyEvent.VK_UP -> upPressed = false;
       case KeyEvent.VK_S, KeyEvent.VK_DOWN -> downPressed = false;
       case KeyEvent.VK_A, KeyEvent.VK_LEFT -> leftPressed = false;
       case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> rightPressed = false;
     }
+  }
+
+  @Override
+  public void keyTyped(KeyEvent e) {
+    // TODO Auto-generated method stub
   }
 }
