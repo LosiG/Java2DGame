@@ -10,6 +10,11 @@ public class KeyHandler implements KeyListener {
   private boolean leftPressed;
   private boolean rightPressed;
   private boolean spaceBarPressed;
+  
+  private boolean shootUp;
+  private boolean shootDown;
+  private boolean shootLeft;
+  private boolean shootRight;
 
   public boolean isUpPressed() {
     return upPressed;
@@ -28,7 +33,21 @@ public class KeyHandler implements KeyListener {
   }
 
   public boolean isSpacebarPressed() {
-    return spaceBarPressed;
+    return shootUp;
+  }
+
+  public boolean isShootDownPressed() {
+    return shootDown;
+  }
+
+  public boolean isShootUpPressed() {
+    return shootUp;
+  }
+  public boolean isShootLeftPressed() {
+    return shootLeft;
+  }
+  public boolean isShootRightPressed() {
+    return shootRight;
   }
 
   @Override
@@ -36,10 +55,14 @@ public class KeyHandler implements KeyListener {
     int code = e.getKeyCode();
     switch (code) {
       case KeyEvent.VK_SPACE -> spaceBarPressed = true;
-      case KeyEvent.VK_W, KeyEvent.VK_UP -> upPressed = true;
-      case KeyEvent.VK_S, KeyEvent.VK_DOWN -> downPressed = true;
-      case KeyEvent.VK_A, KeyEvent.VK_LEFT -> leftPressed = true;
-      case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> rightPressed = true;
+      case KeyEvent.VK_W -> upPressed = true;
+      case KeyEvent.VK_S -> downPressed = true;
+      case KeyEvent.VK_A -> leftPressed = true;
+      case KeyEvent.VK_D -> rightPressed = true;
+      case KeyEvent.VK_UP -> shootUp = true;
+      case KeyEvent.VK_DOWN -> shootDown = true;
+      case KeyEvent.VK_LEFT -> shootLeft = true;
+      case KeyEvent.VK_RIGHT -> shootRight = true;
     }
   }
 
@@ -48,10 +71,14 @@ public class KeyHandler implements KeyListener {
     int code = e.getKeyCode();
     switch (code) {
       case KeyEvent.VK_SPACE -> spaceBarPressed = false;
-      case KeyEvent.VK_W, KeyEvent.VK_UP -> upPressed = false;
-      case KeyEvent.VK_S, KeyEvent.VK_DOWN -> downPressed = false;
-      case KeyEvent.VK_A, KeyEvent.VK_LEFT -> leftPressed = false;
-      case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> rightPressed = false;
+      case KeyEvent.VK_W -> upPressed = false;
+      case KeyEvent.VK_S -> downPressed = false;
+      case KeyEvent.VK_A -> leftPressed = false;
+      case KeyEvent.VK_D -> rightPressed = false;
+      case KeyEvent.VK_UP -> shootUp = false;
+      case KeyEvent.VK_DOWN -> shootDown = false;
+      case KeyEvent.VK_LEFT -> shootLeft = false;
+      case KeyEvent.VK_RIGHT -> shootRight = false;
     }
   }
 
