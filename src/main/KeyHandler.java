@@ -33,7 +33,7 @@ public class KeyHandler implements KeyListener {
   }
 
   public boolean isSpacebarPressed() {
-    return shootUp;
+    return spaceBarPressed;
   }
 
   public boolean isShootDownPressed() {
@@ -43,9 +43,11 @@ public class KeyHandler implements KeyListener {
   public boolean isShootUpPressed() {
     return shootUp;
   }
+
   public boolean isShootLeftPressed() {
     return shootLeft;
   }
+
   public boolean isShootRightPressed() {
     return shootRight;
   }

@@ -78,7 +78,6 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
-
     if (keyH.isSpacebarPressed()) {
       pause = !pause;
     }
@@ -86,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
       return;
     }
 
+    System.out.print("We updating");
     if (keyH.isUpPressed()) {
       player.moveUp(player.speed);
     }
