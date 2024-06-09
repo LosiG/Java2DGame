@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -37,7 +38,9 @@ public class GamePanel extends JPanel implements Runnable {
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
   Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1);
   Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1);
+  ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Projectile> projectiles = new ArrayList<>();
+  Collision collision = new Collision(player, projectiles, enemies);
 
 
   public GamePanel() {
@@ -126,6 +129,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     enemy1.moveToPlayer(player.currentX, player.currentY);
     enemy2.moveToPlayer(player.currentX, player.currentY);
+    collision.checkForCollisions();
   }
 
   @Override
