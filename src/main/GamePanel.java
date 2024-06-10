@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements Runnable {
 
   static final Integer ORIGINAL_TILESIZE = 16;
   static final double ONE_SECOND = 1000000000.00;
-  static final double FIRE_RATE = ONE_SECOND / 4;
+  static final double FIRE_RATE = 0.25;
   static final Integer SCALE = 3;
   static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;
   static final Integer MAX_SCREEN_COLUMN = 16;
@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
   long lastProjectileAdded = System.nanoTime(); 
+  long lastPause = System.nanoTime(); 
 
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
   Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1);
@@ -83,8 +84,9 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
-    if (keyH.isSpacebarPressed()) {
+    if (keyH.isSpacebarPressed() && waitForSeconds(lastPause, 0.5)) {
       pause = !pause;
+      this.lastPause = System.nanoTime();
     }
     if (pause) {
       return;
@@ -118,7 +120,7 @@ public class GamePanel extends JPanel implements Runnable {
       if (keyH.isShootRightPressed()) {
         direction = Projectile.RIGHT;
       }
-      if ((System.nanoTime() - lastProjectileAdded) > FIRE_RATE) {
+      if (waitForSeconds(lastProjectileAdded, FIRE_RATE)) {
         projectiles.add(
             new Projectile(
                 player.currentX, player.currentY, PROJECTILE_HEIGHT,
@@ -162,5 +164,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     g2.dispose();
+  }
+
+  public static boolean waitForSeconds(long waitParam, double howLongToWait) {
+    if (System.nanoTime() - waitParam > howLongToWait * ONE_SECOND) {
+      return true;
+    }
+    return false;
   }
 }
