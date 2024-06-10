@@ -3,13 +3,14 @@ package main;
 public class Player extends Entity {
 
     public Player(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration) {
+            Integer acceleration, int hp) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteY = spriteY;
         this.spriteX = spriteX;
         this.speed = speed;
         this.acceleration = acceleration;
+        this.hp = hp;
     }
 
     public Integer getMovementSpeed() {

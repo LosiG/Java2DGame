@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
 
@@ -28,17 +33,23 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer PROJECTILE_SPEED = 25;
   static final Integer PROJECTILE_ACCELERATION = 1;
 
+  static final Integer PLAYER_HP = 100;
+  static final Integer PROJECTILE_DMG = 10;
+  static final Integer MOB_HP = 50;
+  static final Integer MOB_DMG = 10;
+
   static final Integer FPS = 60;
 
   boolean pause = false;
+  boolean gameOver = false;
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
   long lastProjectileAdded = System.nanoTime(); 
   long lastPause = System.nanoTime(); 
 
-  Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
-  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1);
-  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1);
+  Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1, PLAYER_HP);
+  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG);
+  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG);
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Projectile> projectiles = new ArrayList<>();
   Collision collision = new Collision(player, projectiles, enemies);
@@ -84,6 +95,9 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
+    if (gameOver) {
+      return;
+    }
     if (keyH.isSpacebarPressed() && waitForSeconds(lastPause, 0.5)) {
       pause = !pause;
       this.lastPause = System.nanoTime();
@@ -124,7 +138,7 @@ public class GamePanel extends JPanel implements Runnable {
         projectiles.add(
             new Projectile(
                 player.currentX, player.currentY, PROJECTILE_HEIGHT,
-                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION, direction));
+                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION, PROJECTILE_DMG, direction));
         this.lastProjectileAdded = System.nanoTime();
       }
     }
@@ -132,6 +146,9 @@ public class GamePanel extends JPanel implements Runnable {
     enemy1.moveToPlayer(player.currentX, player.currentY);
     enemy2.moveToPlayer(player.currentX, player.currentY);
     collision.checkForCollisions();
+    if (player.hp == 0) {
+      gameOver = true;
+    }
   }
 
   @Override
@@ -146,9 +163,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.setColor(Color.RED);
 
-    g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
+    if (enemy1.hp > 0) {
+      g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
+    } else {
+      enemies.remove(enemy1);
+    }
 
-    g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
+    if (enemy2.hp >0) {
+      g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
+    } else {
+      enemies.remove(enemy2);
+    }
+
 
     g2.setColor(Color.yellow);
     for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
@@ -162,12 +188,22 @@ public class GamePanel extends JPanel implements Runnable {
       g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
       projectile.move(projectile.direction);
     }
+    if (this.player.hp == 0) {
+      BufferedImage base = null;
+      try {
+        base = ImageIO.read(new File("assets\\gameOverScreen.png"));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      g2.drawImage(base, null, getFocusCycleRootAncestor());
+    }
 
     g2.dispose();
   }
 
   public static boolean waitForSeconds(long waitParam, double howLongToWait) {
     if (System.nanoTime() - waitParam > howLongToWait * ONE_SECOND) {
+      waitParam = System.nanoTime();
       return true;
     }
     return false;

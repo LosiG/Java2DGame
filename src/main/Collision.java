@@ -24,7 +24,8 @@ public class Collision {
                     enemy.currentY >= player.currentY &&
                     enemy.currentY <= player.currentY + player.spriteY &&
                     (System.nanoTime() - lastHitTook) > GamePanel.ONE_SECOND / 2) {
-                System.out.println("Player took dmg");
+                player.hp = player.hp - enemy.damage;
+                System.out.println("Player now has: " + player.hp + " hp");
                 lastHitTook = System.nanoTime();
             }
             for (Projectile projectile : projectiles) {
@@ -33,7 +34,8 @@ public class Collision {
                         projectile.currentY >= enemy.currentY &&
                         projectile.currentY <= enemy.currentY + player.spriteY &&
                         (System.nanoTime() - lastShotLanded) > GamePanel.ONE_SECOND / 2) {
-                    System.out.println("Enemy hit");
+                    enemy.hp -= projectile.hp;
+                    System.out.println("Enemy has now: " + enemy.hp + " hp");
                     lastShotLanded = System.nanoTime();
                 }
 
@@ -51,11 +53,11 @@ public class Collision {
     }
 
     public void addProjectile(Projectile projectile) {
-        enemies.add(projectile);
+        projectiles.add(projectile);
     }
 
     public void removeProjectile(Projectile projectile) {
-        enemies.remove(projectile);
+        projectiles.remove(projectile);
     }
 
 }
