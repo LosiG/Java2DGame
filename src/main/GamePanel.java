@@ -4,11 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.JPanel;
+
 
 public class GamePanel extends JPanel implements Runnable {
 
   static final Integer ORIGINAL_TILESIZE = 16;
+  static final double ONE_SECOND = 1000000000.00;
+  static final double FIRE_RATE = ONE_SECOND / 4;
   static final Integer SCALE = 3;
   static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;
   static final Integer MAX_SCREEN_COLUMN = 16;
@@ -16,15 +22,23 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
   static final Integer SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
 
+  static final Integer PROJECTILE_WIDTH = 20;
+  static final Integer PROJECTILE_HEIGHT = 20;
+  static final Integer PROJECTILE_SPEED = 25;
+  static final Integer PROJECTILE_ACCELERATION = 1;
+
   static final Integer FPS = 60;
 
   boolean pause = false;
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
+  long lastProjectileAdded = System.nanoTime(); 
 
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1);
   Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1);
   Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1);
+  ArrayList<Projectile> projectiles = new ArrayList<>();
+
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -66,7 +80,6 @@ public class GamePanel extends JPanel implements Runnable {
   }
 
   public void update() {
-
     if (keyH.isSpacebarPressed()) {
       pause = !pause;
     }
@@ -85,6 +98,30 @@ public class GamePanel extends JPanel implements Runnable {
     }
     if (keyH.isRightPressed()) {
       player.moveRight(player.speed);
+    }
+
+    if (keyH.isShootDownPressed() || keyH.isShootLeftPressed() ||
+        keyH.isShootRightPressed() || keyH.isShootUpPressed()) {
+      String direction = "";
+      if (keyH.isShootDownPressed()) {
+        direction = Projectile.DOWN;
+      }
+      if (keyH.isShootUpPressed()) {
+        direction = Projectile.UP;
+      }
+      if (keyH.isShootLeftPressed()) {
+        direction = Projectile.LEFT;
+      }
+      if (keyH.isShootRightPressed()) {
+        direction = Projectile.RIGHT;
+      }
+      if ((System.nanoTime() - lastProjectileAdded) > FIRE_RATE) {
+        projectiles.add(
+            new Projectile(
+                player.currentX, player.currentY, PROJECTILE_HEIGHT,
+                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION, direction));
+        this.lastProjectileAdded = System.nanoTime();
+      }
     }
 
     enemy1.moveToPlayer(player.currentX, player.currentY);
@@ -106,6 +143,19 @@ public class GamePanel extends JPanel implements Runnable {
     g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
 
     g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
+
+    g2.setColor(Color.yellow);
+    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+      Projectile projectile = it.next();
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        it.remove();
+      }
+      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
+      projectile.move(projectile.direction);
+    }
 
     g2.dispose();
   }

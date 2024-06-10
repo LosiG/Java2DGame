@@ -32,6 +32,14 @@ public class Player extends Entity {
         this.currentX += value;
     }
 
+    public int getPlayerPosX() {
+        return this.currentX;
+    }
+
+    public int getPlayerPosY() {
+        return this.currentY;
+    }
+
     @Override
     public String toString() {
         return "Player [currentX=" + currentX + ", currentY=" + currentY + ", spriteY=" + spriteY + ", spriteX="
