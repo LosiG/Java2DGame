@@ -3,13 +3,17 @@ package main;
 public class Enemy extends Entity {
 
     public Enemy(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration) {
+            Integer acceleration, int hp, int damage) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteY = spriteY;
         this.spriteX = spriteX;
         this.speed = speed;
         this.acceleration = acceleration;
+        this.hp = hp;
+        this.damage = damage;
+        this.lastDamageDone = System.nanoTime();
+        this.lastHitTook = System.nanoTime();
     }
 
     public void moveToPlayer(Integer playerX, Integer playerY) {
@@ -61,4 +65,8 @@ public class Enemy extends Entity {
         this.currentX += value;
     }
 
+    @Override
+    String getObjectName() {
+        return "Enemy";
+    }
 }

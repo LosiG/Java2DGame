@@ -1,6 +1,6 @@
 package main;
 
-public class Projectile extends Enemy {
+public class Projectile extends Entity {
     String direction;
     static final String UP = "UP";
     static final String DOWN = "DOWN";
@@ -8,9 +8,16 @@ public class Projectile extends Enemy {
     static final String RIGHT = "RIGHT";
 
     public Projectile(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration, String direction) {
-        super(currentX, currentY, spriteY, spriteX, speed, acceleration);
+            Integer acceleration, Integer damage, String direction) {
+        this.currentX = currentX;
+        this.currentY = currentY;
+        this.spriteX = spriteX;
+        this.spriteY = spriteY ;
+        this.speed = speed;
+        this.acceleration = acceleration;
+        this.damage = damage;
         this.direction = direction;
+        this.lastDamageDone = System.nanoTime();
     }
     
     public void moveUp(Integer value) {
@@ -46,5 +53,10 @@ public class Projectile extends Enemy {
             default:
                 break;
         }
+    }
+
+    @Override
+    String getObjectName() {
+        return "Projectile";
     }
 }
