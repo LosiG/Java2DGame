@@ -3,45 +3,22 @@ package main;
 import java.util.ArrayList;
 
 public class Collision {
-    Player player;
+    ArrayList<Player> player;
     ArrayList<Projectile> projectiles;
     ArrayList<Enemy> enemies;
     long lastHitTook = System.nanoTime();
     long lastShotLanded = System.nanoTime();
 
 
-    public Collision( Player player, ArrayList<Projectile> projectiles, ArrayList<Enemy> enemies) {
+    public Collision(ArrayList<Player> player, ArrayList<Projectile> projectiles, ArrayList<Enemy> enemies) {
         this.enemies = enemies;
         this.player = player;
         this.projectiles = projectiles;
     }
 
     public void checkForCollisions() {
-
-        for (Enemy enemy : enemies) {
-            if (enemy.currentX >= player.currentX &&
-                    enemy.currentX <= player.currentX + player.spriteX &&
-                    enemy.currentY >= player.currentY &&
-                    enemy.currentY <= player.currentY + player.spriteY &&
-                    (System.nanoTime() - lastHitTook) > GamePanel.ONE_SECOND / 2) {
-                player.hp = player.hp - enemy.damage;
-                System.out.println("Player now has: " + player.hp + " hp");
-                lastHitTook = System.nanoTime();
-            }
-            for (Projectile projectile : projectiles) {
-                if (projectile.currentX >= enemy.currentX &&
-                        projectile.currentX <= enemy.currentX + player.spriteX &&
-                        projectile.currentY >= enemy.currentY &&
-                        projectile.currentY <= enemy.currentY + player.spriteY &&
-                        (System.nanoTime() - lastShotLanded) > GamePanel.ONE_SECOND / 2) {
-                    enemy.hp -= projectile.hp;
-                    System.out.println("Enemy has now: " + enemy.hp + " hp");
-                    lastShotLanded = System.nanoTime();
-                }
-
-            }
-        }
-
+        entitiesCollided(projectiles, enemies);
+        entitiesCollided(enemies, player);
     }
 
     public void addEnemies(Enemy enemy) {
@@ -60,4 +37,28 @@ public class Collision {
         projectiles.remove(projectile);
     }
 
+    public <DamageDealer extends Entity, Tank extends Entity> void entitiesCollided(ArrayList<DamageDealer> damageDealers, ArrayList<Tank> tanks){
+        for (DamageDealer damageDealer : damageDealers) {
+            for (Tank tank : tanks) {
+                if (entityCollided(damageDealer, tank)) {
+                    Collision.resolveDamage(damageDealer, tank);
+                }
+            }
+        }
+    }
+
+    static <DamageDealer extends Entity, Tank extends Entity> void resolveDamage(DamageDealer damageDealer, Tank tank) {
+        if (System.nanoTime() - tank.lastHitTook > GamePanel.ONE_SECOND / 2) {
+            System.out.print(tank.getObjectName() +" took " + damageDealer.damage + " dmg\n");
+            tank.hp -= damageDealer.damage;
+            tank.lastHitTook = System.nanoTime();
+        }
+    }
+    
+    static <DamageDealer extends Entity, Tank extends Entity> boolean entityCollided(DamageDealer damageDealer, Tank tank) {
+        return damageDealer.currentX >= tank.currentX &&
+                damageDealer.currentX <= tank.currentX + tank.spriteX &&
+                damageDealer.currentY >= tank.currentY &&
+                damageDealer.currentY <= tank.currentY + tank.spriteY;
+    }
 }

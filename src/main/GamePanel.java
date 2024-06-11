@@ -51,8 +51,9 @@ public class GamePanel extends JPanel implements Runnable {
   Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG);
   Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG);
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
+  ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
-  Collision collision = new Collision(player, projectiles, enemies);
+  Collision collision = new Collision(players, projectiles, enemies);
 
 
   public GamePanel() {

@@ -8,15 +8,16 @@ public class Projectile extends Entity {
     static final String RIGHT = "RIGHT";
 
     public Projectile(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration, Integer hp, String direction) {
+            Integer acceleration, Integer damage, String direction) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteX = spriteX;
         this.spriteY = spriteY ;
         this.speed = speed;
         this.acceleration = acceleration;
-        this.hp = hp;
+        this.damage = damage;
         this.direction = direction;
+        this.lastDamageDone = System.nanoTime();
     }
     
     public void moveUp(Integer value) {
@@ -52,5 +53,10 @@ public class Projectile extends Entity {
             default:
                 break;
         }
+    }
+
+    @Override
+    String getObjectName() {
+        return "Projectile";
     }
 }

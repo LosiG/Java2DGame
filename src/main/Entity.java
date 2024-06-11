@@ -8,6 +8,9 @@ public abstract class Entity {
     Integer speed;
     Integer acceleration;
     Integer hp;
+    Integer damage;
+    long lastHitTook;
+    long lastDamageDone;
 
     abstract void moveUp(Integer value);
 
@@ -16,4 +19,6 @@ public abstract class Entity {
     abstract void moveLeft(Integer value);
 
     abstract void moveRight(Integer value);
+
+    abstract String getObjectName();
 }
