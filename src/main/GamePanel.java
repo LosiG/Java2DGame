@@ -199,6 +199,19 @@ public class GamePanel extends JPanel implements Runnable {
       g2.drawImage(base, null, getFocusCycleRootAncestor());
     }
 
+    g2.setColor(Color.yellow);
+    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+      Projectile projectile = it.next();
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        it.remove();
+      }
+      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
+      projectile.move(projectile.direction);
+    }
+
     g2.dispose();
   }
 
