@@ -201,10 +201,9 @@ public class GamePanel extends JPanel implements Runnable {
       if (System.nanoTime() - enemy.lastHitTook > ONE_SECOND * enemy.invincibility) {
         g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY);
       } else {
-        if (System.nanoTime() - enemy.lastInvincibilityRender < ONE_SECOND / 8) {
+        if (System.nanoTime() - enemy.lastInvincibilityRender < ONE_SECOND / 4) {
           g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY);
-        }
-        if (System.nanoTime() - enemy.lastInvincibilityRender > ONE_SECOND / 7)
+        } else if (System.nanoTime() - enemy.lastInvincibilityRender > ONE_SECOND / 3)
           enemy.lastInvincibilityRender = System.nanoTime();
       }
 
