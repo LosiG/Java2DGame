@@ -14,6 +14,7 @@ public class Enemy extends Entity {
         this.acceleration = acceleration;
         this.hp = hp;
         this.damage = damage;
+        this.invincibility = 1;
         this.lastDamageDone = System.nanoTime();
         this.lastHitTook = System.nanoTime();
         this.score = score;

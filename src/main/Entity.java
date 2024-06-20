@@ -9,6 +9,7 @@ public abstract class Entity {
     Integer acceleration;
     Integer hp;
     Integer damage;
+    Integer invincibility;
     long lastHitTook;
     long lastDamageDone;
 

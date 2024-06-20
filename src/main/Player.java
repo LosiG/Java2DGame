@@ -11,6 +11,7 @@ public class Player extends Entity {
         this.speed = speed;
         this.acceleration = acceleration;
         this.hp = hp;
+        this.invincibility = 1;
     }
 
     public Integer getMovementSpeed() {
@@ -46,7 +47,7 @@ public class Player extends Entity {
         return "Player [currentX=" + currentX + ", currentY=" + currentY + ", spriteY=" + spriteY + ", spriteX="
                 + spriteX + ", speed=" + speed + ", acceleration=" + acceleration + "]";
     }
-    
+
     @Override
     String getObjectName() {
         return "Player";

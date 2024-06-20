@@ -12,14 +12,15 @@ public class Projectile extends Entity {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteX = spriteX;
-        this.spriteY = spriteY ;
+        this.spriteY = spriteY;
         this.speed = speed;
         this.acceleration = acceleration;
         this.damage = damage;
         this.direction = direction;
         this.lastDamageDone = System.nanoTime();
+        this.invincibility = 0;
     }
-    
+
     public void moveUp(Integer value) {
         this.currentY -= value;
     }
