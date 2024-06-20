@@ -23,4 +23,6 @@ public abstract class Entity {
     abstract void moveRight(Integer value);
 
     abstract String getObjectName();
+
+    abstract void paint(java.awt.Graphics2D graphic);
 }

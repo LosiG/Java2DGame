@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Graphics2D;
+
 public class Enemy extends Entity {
 
     Integer score;
@@ -82,6 +84,11 @@ public class Enemy extends Entity {
                 + ", damage=" + damage + ", lastHitTook=" + lastHitTook + ", lastDamageDone=" + lastDamageDone
                 + ", getClass()=" + getClass() + ", getObjectName()=" + getObjectName() + ", hashCode()=" + hashCode()
                 + ", toString()=" + super.toString() + "]";
+    }
+
+    @Override
+    void paint(Graphics2D graphic) {
+        graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
     }
 
 }

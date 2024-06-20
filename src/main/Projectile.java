@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Graphics2D;
+
 public class Projectile extends Entity {
     String direction;
     static final String UP = "UP";
@@ -59,5 +61,10 @@ public class Projectile extends Entity {
     @Override
     String getObjectName() {
         return "Projectile";
+    }
+
+    @Override
+    void paint(Graphics2D graphic) {
+        graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
     }
 }
