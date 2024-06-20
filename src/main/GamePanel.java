@@ -15,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class GamePanel extends JPanel implements Runnable {
 
   static final Integer ORIGINAL_TILESIZE = 16;
@@ -46,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
   long lastProjectileAdded = System.nanoTime();
   long lastPause = System.nanoTime();
   Integer score = 0;
+  long lastEnemySpawn = System.currentTimeMillis();
 
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1, PLAYER_HP);
   Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG, 10);
@@ -142,16 +145,19 @@ public class GamePanel extends JPanel implements Runnable {
         this.lastProjectileAdded = System.nanoTime();
       }
     }
-
+    if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 5000) {
+      enemies.add(generateRandomEnemy());
+      lastEnemySpawn = System.currentTimeMillis();
+    }
     for (Enemy enemy : enemies) {
       enemy.moveToPlayer(player.currentX, player.currentY);
-      if (enemy.hp == 0) {
+      if (enemy.hp <= 0) {
         score += enemy.score;
       }
     }
     // Da capire meglio come gestire il remove all'interno del for senza
     // scoppiare il gioco
-    enemies.removeIf(enemy -> enemy.hp == 0);
+    enemies.removeIf(enemy -> enemy.hp <= 0);
 
     projectiles.forEach(projectile -> projectile.move(projectile.direction));
     projectiles.removeIf(projectile -> (projectile.currentX > SCREEN_WIDTH ||
@@ -164,6 +170,15 @@ public class GamePanel extends JPanel implements Runnable {
     if (player.hp == 0) {
       gameOver = true;
     }
+  }
+
+  private Enemy generateRandomEnemy() {
+    return new Enemy(ThreadLocalRandom.current().nextInt(0, SCREEN_WIDTH),
+        ThreadLocalRandom.current().nextInt(0, SCREEN_HEIGHT), TILE_SIZE, TILE_SIZE,
+        ThreadLocalRandom.current().nextInt(1, 3),
+        1,
+        ThreadLocalRandom.current().nextInt(20, 100),
+        ThreadLocalRandom.current().nextInt(5, 10), 10);
   }
 
   @Override
