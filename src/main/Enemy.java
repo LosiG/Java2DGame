@@ -15,8 +15,9 @@ public class Enemy extends Entity {
         this.hp = hp;
         this.damage = damage;
         this.invincibility = 1;
-        this.lastDamageDone = System.nanoTime();
-        this.lastHitTook = System.nanoTime();
+        this.lastInvincibilityRender = 0;
+        this.lastDamageDone = 0;
+        this.lastHitTook = 0;
         this.score = score;
     }
 

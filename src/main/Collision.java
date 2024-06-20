@@ -52,6 +52,7 @@ public class Collision {
             System.out.print(tank.getObjectName() + " took " + damageDealer.damage + " dmg\n");
             tank.hp -= damageDealer.damage;
             tank.lastHitTook = System.nanoTime();
+            tank.lastInvincibilityRender = System.nanoTime();
         }
     }
 
