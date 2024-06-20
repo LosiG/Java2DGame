@@ -2,8 +2,10 @@ package main;
 
 public class Enemy extends Entity {
 
+    Integer score;
+
     public Enemy(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration, int hp, int damage) {
+            Integer acceleration, int hp, int damage, int score) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteY = spriteY;
@@ -14,6 +16,7 @@ public class Enemy extends Entity {
         this.damage = damage;
         this.lastDamageDone = System.nanoTime();
         this.lastHitTook = System.nanoTime();
+        this.score = score;
     }
 
     public void moveToPlayer(Integer playerX, Integer playerY) {
