@@ -15,7 +15,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
-
 public class GamePanel extends JPanel implements Runnable {
 
   static final Integer ORIGINAL_TILESIZE = 16;
@@ -44,17 +43,16 @@ public class GamePanel extends JPanel implements Runnable {
   boolean gameOver = false;
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
-  long lastProjectileAdded = System.nanoTime(); 
-  long lastPause = System.nanoTime(); 
+  long lastProjectileAdded = System.nanoTime();
+  long lastPause = System.nanoTime();
 
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1, PLAYER_HP);
-  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG);
-  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG);
+  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG, 10);
+  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG, 10);
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
   Collision collision = new Collision(players, projectiles, enemies);
-
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -144,9 +142,11 @@ public class GamePanel extends JPanel implements Runnable {
       }
     }
 
-    enemy1.moveToPlayer(player.currentX, player.currentY);
-    enemy2.moveToPlayer(player.currentX, player.currentY);
+    enemies.removeIf(enemy -> enemy.hp.equals(0));
+    enemies.forEach(enemy -> enemy.moveToPlayer(player.currentX, player.currentY));
+
     collision.checkForCollisions();
+
     if (player.hp == 0) {
       gameOver = true;
     }
@@ -164,18 +164,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.setColor(Color.RED);
 
-    if (enemy1.hp > 0) {
-      g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
-    } else {
-      enemies.remove(enemy1);
-    }
-
-    if (enemy2.hp >0) {
-      g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
-    } else {
-      enemies.remove(enemy2);
-    }
-
+    enemies.forEach(enemy -> g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY));
 
     g2.setColor(Color.yellow);
     for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
