@@ -201,15 +201,17 @@ public class GamePanel extends JPanel implements Runnable {
     enemies.forEach(enemy -> g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY));
 
     g2.setColor(Color.yellow);
-
-    projectiles.forEach(
-        projectile -> g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY));
-
-    g2.setColor(Color.WHITE);
-
-    String scoreTitle = "Score: " + score.toString();
-    g2.drawString(scoreTitle, 700, 20);
-
+    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+      Projectile projectile = it.next();
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        it.remove();
+      }
+      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
+      projectile.move(projectile.direction);
+    }
     if (this.player.hp == 0) {
       BufferedImage base = null;
       try {
