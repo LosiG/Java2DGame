@@ -88,7 +88,14 @@ public class Enemy extends Entity {
 
     @Override
     void paint(Graphics2D graphic) {
-        graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+        if (System.nanoTime() - this.lastHitTook > GamePanel.ONE_SECOND * this.invincibility) {
+            graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+        } else {
+            if (System.nanoTime() - this.lastInvincibilityRender < GamePanel.ONE_SECOND / 4) {
+                graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+            } else if (System.nanoTime() - this.lastInvincibilityRender > GamePanel.ONE_SECOND / 3)
+                this.lastInvincibilityRender = System.nanoTime();
+        }
     }
 
 }

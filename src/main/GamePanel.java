@@ -198,15 +198,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.setColor(Color.RED);
     enemies.forEach(enemy -> {
-      if (System.nanoTime() - enemy.lastHitTook > ONE_SECOND * enemy.invincibility) {
-        enemy.paint(g2);
-      } else {
-        if (System.nanoTime() - enemy.lastInvincibilityRender < ONE_SECOND / 4) {
-          enemy.paint(g2);
-        } else if (System.nanoTime() - enemy.lastInvincibilityRender > ONE_SECOND / 3)
-          enemy.lastInvincibilityRender = System.nanoTime();
-      }
-
+      enemy.paint(g2);
     });
 
     g2.setColor(Color.yellow);
