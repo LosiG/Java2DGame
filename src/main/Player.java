@@ -1,6 +1,13 @@
 package main;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Player extends Entity {
 
@@ -57,6 +64,15 @@ public class Player extends Entity {
 
     @Override
     void paint(Graphics2D graphic) {
-        graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+        BufferedImage img = null;
+        try {
+            String playerImage = "assets/player.png";
+            img = ImageIO.read(
+                    new File(playerImage));
+            graphic.drawImage(img, this.currentX, this.currentY, null);
+        } catch (IOException e) {
+            graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+            e.printStackTrace();
+        }
     }
 }
