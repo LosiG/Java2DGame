@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -44,17 +45,18 @@ public class GamePanel extends JPanel implements Runnable {
   boolean gameOver = false;
   KeyHandler keyH = new KeyHandler();
   Thread gameThread;
-  long lastProjectileAdded = System.nanoTime(); 
-  long lastPause = System.nanoTime(); 
+  long lastProjectileAdded = System.nanoTime();
+  long lastPause = System.nanoTime();
+  Integer score = 0;
+  long lastEnemySpawn = System.currentTimeMillis();
 
   Player player = new Player(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 3, 1, PLAYER_HP);
-  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG);
-  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG);
+  Enemy enemy1 = new Enemy(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE, 2, 1, MOB_HP, MOB_DMG, 10);
+  Enemy enemy2 = new Enemy(400, 400, TILE_SIZE, TILE_SIZE, 1, 1, MOB_HP, MOB_DMG, 10);
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
   Collision collision = new Collision(players, projectiles, enemies);
-
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -143,13 +145,45 @@ public class GamePanel extends JPanel implements Runnable {
         this.lastProjectileAdded = System.nanoTime();
       }
     }
+    Iterator<Enemy> enemyIterator = enemies.iterator();
+    while (enemyIterator.hasNext()) {
+      Enemy enemy = enemyIterator.next();
+      enemy.moveToPlayer(player.currentX, player.currentY);
+      if (enemy.hp <= 0) {
+        score += enemy.score;
+        enemyIterator.remove();
+      }
 
-    enemy1.moveToPlayer(player.currentX, player.currentY);
-    enemy2.moveToPlayer(player.currentX, player.currentY);
+    }
+    if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 5000) {
+      enemies.add(generateRandomEnemy());
+      lastEnemySpawn = System.currentTimeMillis();
+    }
+    Iterator<Projectile> projectileIterator = projectiles.iterator();
+    while (projectileIterator.hasNext()) {
+      Projectile projectile = projectileIterator.next();
+      projectile.move(projectile.direction);
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        projectileIterator.remove();
+      }
+    }
     collision.checkForCollisions();
+
     if (player.hp == 0) {
       gameOver = true;
     }
+  }
+
+  private Enemy generateRandomEnemy() {
+    return new Enemy(ThreadLocalRandom.current().nextInt(0, SCREEN_WIDTH),
+        ThreadLocalRandom.current().nextInt(0, SCREEN_HEIGHT), TILE_SIZE, TILE_SIZE,
+        ThreadLocalRandom.current().nextInt(1, 3),
+        1,
+        ThreadLocalRandom.current().nextInt(20, 100),
+        ThreadLocalRandom.current().nextInt(5, 10), 10);
   }
 
   @Override
@@ -164,31 +198,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.setColor(Color.RED);
 
-    if (enemy1.hp > 0) {
-      g2.fillRect(enemy1.currentX, enemy1.currentY, enemy1.spriteX, enemy1.spriteY);
-    } else {
-      enemies.remove(enemy1);
-    }
-
-    if (enemy2.hp >0) {
-      g2.fillRect(enemy2.currentX, enemy2.currentY, enemy2.spriteX, enemy2.spriteY);
-    } else {
-      enemies.remove(enemy2);
-    }
-
+    enemies.forEach(enemy -> g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY));
 
     g2.setColor(Color.yellow);
-    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
-      Projectile projectile = it.next();
-      if (projectile.currentX > SCREEN_WIDTH ||
-          projectile.currentY > SCREEN_HEIGHT ||
-          projectile.currentX < 0 ||
-          projectile.currentY < 0) {
-        it.remove();
-      }
-      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
-      projectile.move(projectile.direction);
-    }
+
+    projectiles.forEach(
+        projectile -> g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY));
+
+    g2.setColor(Color.WHITE);
+
+    String scoreTitle = "Score: " + score.toString();
+    g2.drawString(scoreTitle, 700, 20);
+
     if (this.player.hp == 0) {
       BufferedImage base = null;
       try {
@@ -197,19 +218,6 @@ public class GamePanel extends JPanel implements Runnable {
         e.printStackTrace();
       }
       g2.drawImage(base, null, getFocusCycleRootAncestor());
-    }
-
-    g2.setColor(Color.yellow);
-    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
-      Projectile projectile = it.next();
-      if (projectile.currentX > SCREEN_WIDTH ||
-          projectile.currentY > SCREEN_HEIGHT ||
-          projectile.currentX < 0 ||
-          projectile.currentY < 0) {
-        it.remove();
-      }
-      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
-      projectile.move(projectile.direction);
     }
 
     g2.dispose();

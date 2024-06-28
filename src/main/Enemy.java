@@ -2,8 +2,10 @@ package main;
 
 public class Enemy extends Entity {
 
+    Integer score;
+
     public Enemy(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration, int hp, int damage) {
+            Integer acceleration, int hp, int damage, int score) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteY = spriteY;
@@ -14,6 +16,7 @@ public class Enemy extends Entity {
         this.damage = damage;
         this.lastDamageDone = System.nanoTime();
         this.lastHitTook = System.nanoTime();
+        this.score = score;
     }
 
     public void moveToPlayer(Integer playerX, Integer playerY) {
@@ -69,4 +72,14 @@ public class Enemy extends Entity {
     String getObjectName() {
         return "Enemy";
     }
+
+    @Override
+    public String toString() {
+        return "Enemy [currentX=" + currentX + ", score=" + score + ", currentY=" + currentY + ", spriteY=" + spriteY
+                + ", spriteX=" + spriteX + ", speed=" + speed + ", acceleration=" + acceleration + ", hp=" + hp
+                + ", damage=" + damage + ", lastHitTook=" + lastHitTook + ", lastDamageDone=" + lastDamageDone
+                + ", getClass()=" + getClass() + ", getObjectName()=" + getObjectName() + ", hashCode()=" + hashCode()
+                + ", toString()=" + super.toString() + "]";
+    }
+
 }
