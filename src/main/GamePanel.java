@@ -145,26 +145,31 @@ public class GamePanel extends JPanel implements Runnable {
         this.lastProjectileAdded = System.nanoTime();
       }
     }
+    Iterator<Enemy> enemyIterator = enemies.iterator();
+    while (enemyIterator.hasNext()) {
+      Enemy enemy = enemyIterator.next();
+      enemy.moveToPlayer(player.currentX, player.currentY);
+      if (enemy.hp <= 0) {
+        score += enemy.score;
+        enemyIterator.remove();
+      }
+
+    }
     if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 5000) {
       enemies.add(generateRandomEnemy());
       lastEnemySpawn = System.currentTimeMillis();
     }
-    for (Enemy enemy : enemies) {
-      enemy.moveToPlayer(player.currentX, player.currentY);
-      if (enemy.hp <= 0) {
-        score += enemy.score;
+    Iterator<Projectile> projectileIterator = projectiles.iterator();
+    while (projectileIterator.hasNext()) {
+      Projectile projectile = projectileIterator.next();
+      projectile.move(projectile.direction);
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        projectileIterator.remove();
       }
     }
-    // Da capire meglio come gestire il remove all'interno del for senza
-    // scoppiare il gioco
-    enemies.removeIf(enemy -> enemy.hp <= 0);
-
-    projectiles.forEach(projectile -> projectile.move(projectile.direction));
-    projectiles.removeIf(projectile -> (projectile.currentX > SCREEN_WIDTH ||
-        projectile.currentY > SCREEN_HEIGHT ||
-        projectile.currentX < 0 ||
-        projectile.currentY < 0));
-
     collision.checkForCollisions();
 
     if (player.hp == 0) {
