@@ -55,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
+  Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
   Collision collision = new Collision(players, projectiles, enemies);
 
   public GamePanel() {
@@ -190,7 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
     super.paintComponent(g);
 
     Graphics2D g2 = (Graphics2D) g;
-
+    terrain.paint(g2);
     g2.setColor(Color.MAGENTA);
 
     player.paint(g2);
