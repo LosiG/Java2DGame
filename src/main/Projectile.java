@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Graphics2D;
+
 public class Projectile extends Entity {
     String direction;
     static final String UP = "UP";
@@ -12,14 +14,15 @@ public class Projectile extends Entity {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteX = spriteX;
-        this.spriteY = spriteY ;
+        this.spriteY = spriteY;
         this.speed = speed;
         this.acceleration = acceleration;
         this.damage = damage;
         this.direction = direction;
         this.lastDamageDone = System.nanoTime();
+        this.invincibility = 0;
     }
-    
+
     public void moveUp(Integer value) {
         this.currentY -= value;
     }
@@ -58,5 +61,10 @@ public class Projectile extends Entity {
     @Override
     String getObjectName() {
         return "Projectile";
+    }
+
+    @Override
+    void paint(Graphics2D graphic) {
+        graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
     }
 }

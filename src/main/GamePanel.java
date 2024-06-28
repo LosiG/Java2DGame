@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.JPanel;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -194,22 +193,25 @@ public class GamePanel extends JPanel implements Runnable {
 
     g2.setColor(Color.MAGENTA);
 
-    g2.fillRect(player.currentX, player.currentY, player.spriteX, player.spriteY);
+    player.paint(g2);
 
     g2.setColor(Color.RED);
-
-    enemies.forEach(enemy -> g2.fillRect(enemy.currentX, enemy.currentY, enemy.spriteX, enemy.spriteY));
+    enemies.forEach(enemy -> {
+      enemy.paint(g2);
+    });
 
     g2.setColor(Color.yellow);
-
-    projectiles.forEach(
-        projectile -> g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY));
-
-    g2.setColor(Color.WHITE);
-
-    String scoreTitle = "Score: " + score.toString();
-    g2.drawString(scoreTitle, 700, 20);
-
+    for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+      Projectile projectile = it.next();
+      if (projectile.currentX > SCREEN_WIDTH ||
+          projectile.currentY > SCREEN_HEIGHT ||
+          projectile.currentX < 0 ||
+          projectile.currentY < 0) {
+        it.remove();
+      }
+      g2.fillRect(projectile.currentX, projectile.currentY, projectile.spriteX, projectile.spriteY);
+      projectile.move(projectile.direction);
+    }
     if (this.player.hp == 0) {
       BufferedImage base = null;
       try {

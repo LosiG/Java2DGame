@@ -9,7 +9,6 @@ public class Collision {
     long lastHitTook = System.nanoTime();
     long lastShotLanded = System.nanoTime();
 
-
     public Collision(ArrayList<Player> player, ArrayList<Projectile> projectiles, ArrayList<Enemy> enemies) {
         this.enemies = enemies;
         this.player = player;
@@ -37,7 +36,8 @@ public class Collision {
         projectiles.remove(projectile);
     }
 
-    public <DamageDealer extends Entity, Tank extends Entity> void entitiesCollided(ArrayList<DamageDealer> damageDealers, ArrayList<Tank> tanks){
+    public <DamageDealer extends Entity, Tank extends Entity> void entitiesCollided(
+            ArrayList<DamageDealer> damageDealers, ArrayList<Tank> tanks) {
         for (DamageDealer damageDealer : damageDealers) {
             for (Tank tank : tanks) {
                 if (entityCollided(damageDealer, tank)) {
@@ -48,14 +48,16 @@ public class Collision {
     }
 
     static <DamageDealer extends Entity, Tank extends Entity> void resolveDamage(DamageDealer damageDealer, Tank tank) {
-        if (System.nanoTime() - tank.lastHitTook > GamePanel.ONE_SECOND / 2) {
-            System.out.print(tank.getObjectName() +" took " + damageDealer.damage + " dmg\n");
+        if (System.nanoTime() - tank.lastHitTook > (tank.invincibility * GamePanel.ONE_SECOND) / 2) {
+            System.out.print(tank.getObjectName() + " took " + damageDealer.damage + " dmg\n");
             tank.hp -= damageDealer.damage;
             tank.lastHitTook = System.nanoTime();
+            tank.lastInvincibilityRender = System.nanoTime();
         }
     }
-    
-    static <DamageDealer extends Entity, Tank extends Entity> boolean entityCollided(DamageDealer damageDealer, Tank tank) {
+
+    static <DamageDealer extends Entity, Tank extends Entity> boolean entityCollided(DamageDealer damageDealer,
+            Tank tank) {
         return damageDealer.currentX >= tank.currentX &&
                 damageDealer.currentX <= tank.currentX + tank.spriteX &&
                 damageDealer.currentY >= tank.currentY &&

@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Graphics2D;
+
 public class Enemy extends Entity {
 
     Integer score;
@@ -14,8 +16,10 @@ public class Enemy extends Entity {
         this.acceleration = acceleration;
         this.hp = hp;
         this.damage = damage;
-        this.lastDamageDone = System.nanoTime();
-        this.lastHitTook = System.nanoTime();
+        this.invincibility = 1;
+        this.lastInvincibilityRender = 0;
+        this.lastDamageDone = 0;
+        this.lastHitTook = 0;
         this.score = score;
     }
 
@@ -80,6 +84,18 @@ public class Enemy extends Entity {
                 + ", damage=" + damage + ", lastHitTook=" + lastHitTook + ", lastDamageDone=" + lastDamageDone
                 + ", getClass()=" + getClass() + ", getObjectName()=" + getObjectName() + ", hashCode()=" + hashCode()
                 + ", toString()=" + super.toString() + "]";
+    }
+
+    @Override
+    void paint(Graphics2D graphic) {
+        if (System.nanoTime() - this.lastHitTook > GamePanel.ONE_SECOND * this.invincibility) {
+            graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+        } else {
+            if (System.nanoTime() - this.lastInvincibilityRender < GamePanel.ONE_SECOND / 4) {
+                graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+            } else if (System.nanoTime() - this.lastInvincibilityRender > GamePanel.ONE_SECOND / 3)
+                this.lastInvincibilityRender = System.nanoTime();
+        }
     }
 
 }

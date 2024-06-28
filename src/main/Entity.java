@@ -9,6 +9,8 @@ public abstract class Entity {
     Integer acceleration;
     Integer hp;
     Integer damage;
+    Integer invincibility;
+    long lastInvincibilityRender;
     long lastHitTook;
     long lastDamageDone;
 
@@ -21,4 +23,6 @@ public abstract class Entity {
     abstract void moveRight(Integer value);
 
     abstract String getObjectName();
+
+    abstract void paint(java.awt.Graphics2D graphic);
 }
