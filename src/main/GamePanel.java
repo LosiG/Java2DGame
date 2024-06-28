@@ -203,6 +203,11 @@ public class GamePanel extends JPanel implements Runnable {
     g2.setColor(Color.yellow);
     projectiles.forEach(projectile -> projectile.paint(g2));
 
+    g2.setColor(Color.WHITE);
+
+    String scoreTitle = "Score: " + score.toString();
+    g2.drawString(scoreTitle, 700, 20);
+
     if (this.player.hp == 0) {
       BufferedImage base = null;
       try {
