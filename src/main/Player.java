@@ -21,6 +21,13 @@ public class Player extends Entity {
         this.acceleration = acceleration;
         this.hp = hp;
         this.invincibility = 1;
+        try {
+            String playerImage = "assets/player.png";
+            img = ImageIO.read(
+                    new File(playerImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Integer getMovementSpeed() {
@@ -64,15 +71,11 @@ public class Player extends Entity {
 
     @Override
     void paint(Graphics2D graphic) {
-        BufferedImage img = null;
-        try {
-            String playerImage = "assets/player.png";
-            img = ImageIO.read(
-                    new File(playerImage));
+        if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
-        } catch (IOException e) {
+        } else {
             graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
-            e.printStackTrace();
         }
+
     }
 }

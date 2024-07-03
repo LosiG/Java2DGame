@@ -26,6 +26,14 @@ public class Enemy extends Entity {
         this.lastDamageDone = 0;
         this.lastHitTook = 0;
         this.score = score;
+        try {
+            String enemyImage = "assets/enemy_1.png";
+            img = ImageIO.read(
+                    new File(enemyImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void moveToPlayer(Integer playerX, Integer playerY) {
@@ -105,15 +113,10 @@ public class Enemy extends Entity {
     }
 
     void draw(Graphics2D graphic) {
-        BufferedImage img = null;
-        String enemyImage = "assets/enemy_1.png";
-        try {
-            img = ImageIO.read(
-                    new File(enemyImage));
+        if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
-        } catch (IOException e) {
+        } else {
             graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
-            e.printStackTrace();
         }
     }
 

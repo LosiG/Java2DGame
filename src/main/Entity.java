@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.image.BufferedImage;
+
 public abstract class Entity {
     Integer currentX;
     Integer currentY;
@@ -13,6 +15,7 @@ public abstract class Entity {
     long lastInvincibilityRender;
     long lastHitTook;
     long lastDamageDone;
+    BufferedImage img;
 
     abstract void moveUp(Integer value);
 

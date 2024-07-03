@@ -14,25 +14,29 @@ public class Tile {
     Integer sizeX;
     Integer sizeY;
     String type;
+    BufferedImage img;
 
     public Tile(Integer sizeX, Integer sizeY, String type) {
         this.images = Arrays.asList("grass_tile.png");
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.type = type;
-    }
-
-    public void paint(Graphics2D graphic, Integer currentX, Integer currentY) {
-        BufferedImage img = null;
         try {
             String tileImage = "assets/" + this.images.getFirst();
             img = ImageIO.read(
                     new File(tileImage));
-            graphic.drawImage(img, currentX, currentY, null);
         } catch (IOException e) {
-            graphic.fillRect(currentX, currentY, this.sizeX, this.sizeY);
             e.printStackTrace();
         }
+    }
+
+    public void paint(Graphics2D graphic, Integer currentX, Integer currentY) {
+        if (img != null) {
+            graphic.drawImage(img, currentX, currentY, null);
+        } else {
+            graphic.fillRect(currentX, currentY, this.sizeX, this.sizeY);
+        }
+
     }
 
 }
