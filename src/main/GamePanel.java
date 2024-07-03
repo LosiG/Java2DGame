@@ -149,7 +149,7 @@ public class GamePanel extends JPanel implements Runnable {
     while (enemyIterator.hasNext()) {
       Enemy enemy = enemyIterator.next();
       enemy.moveToPlayer(player.currentX, player.currentY);
-      if (enemy.hp <= 0) {
+      if (enemy.currentHp <= 0) {
         score += enemy.score;
         enemyIterator.remove();
       }
@@ -172,7 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     collision.checkForCollisions();
 
-    if (player.hp == 0) {
+    if (player.currentHp == 0) {
       gameOver = true;
     }
   }
@@ -209,7 +209,7 @@ public class GamePanel extends JPanel implements Runnable {
     String scoreTitle = "Score: " + score.toString();
     g2.drawString(scoreTitle, 700, 20);
 
-    if (this.player.hp == 0) {
+    if (this.player.currentHp == 0) {
       BufferedImage base = null;
       try {
         base = ImageIO.read(new File("assets\\gameOverScreen.png"));
