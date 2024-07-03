@@ -19,7 +19,7 @@ public class Enemy extends Entity {
         this.spriteX = spriteX;
         this.speed = speed;
         this.acceleration = acceleration;
-        this.hp = hp;
+        this.currentHp = this.maxHp = hp;
         this.damage = damage;
         this.invincibility = 1;
         this.lastInvincibilityRender = 0;
@@ -93,7 +93,7 @@ public class Enemy extends Entity {
     @Override
     public String toString() {
         return "Enemy [currentX=" + currentX + ", score=" + score + ", currentY=" + currentY + ", spriteY=" + spriteY
-                + ", spriteX=" + spriteX + ", speed=" + speed + ", acceleration=" + acceleration + ", hp=" + hp
+                + ", spriteX=" + spriteX + ", speed=" + speed + ", acceleration=" + acceleration
                 + ", damage=" + damage + ", lastHitTook=" + lastHitTook + ", lastDamageDone=" + lastDamageDone
                 + ", getClass()=" + getClass() + ", getObjectName()=" + getObjectName() + ", hashCode()=" + hashCode()
                 + ", toString()=" + super.toString() + "]";
@@ -113,6 +113,7 @@ public class Enemy extends Entity {
     }
 
     void draw(Graphics2D graphic) {
+        paintHpBar(this, graphic);
         if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
         } else {

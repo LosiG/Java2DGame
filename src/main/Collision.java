@@ -50,7 +50,7 @@ public class Collision {
     static <DamageDealer extends Entity, Tank extends Entity> void resolveDamage(DamageDealer damageDealer, Tank tank) {
         if (System.nanoTime() - tank.lastHitTook > (tank.invincibility * GamePanel.ONE_SECOND) / 2) {
             System.out.print(tank.getObjectName() + " took " + damageDealer.damage + " dmg\n");
-            tank.hp -= damageDealer.damage;
+            tank.currentHp -= damageDealer.damage;
             tank.lastHitTook = System.nanoTime();
             tank.lastInvincibilityRender = System.nanoTime();
         }

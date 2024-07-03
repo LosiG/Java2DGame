@@ -19,7 +19,7 @@ public class Player extends Entity {
         this.spriteX = spriteX;
         this.speed = speed;
         this.acceleration = acceleration;
-        this.hp = hp;
+        this.currentHp = this.maxHp = hp;
         this.invincibility = 1;
         try {
             String playerImage = "assets/player.png";
@@ -71,6 +71,10 @@ public class Player extends Entity {
 
     @Override
     void paint(Graphics2D graphic) {
+
+        paintHpBar(this, graphic);
+
+        // Draw the body
         if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
         } else {
