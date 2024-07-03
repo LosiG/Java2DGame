@@ -1,6 +1,11 @@
 package main;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Enemy extends Entity {
 
@@ -21,6 +26,14 @@ public class Enemy extends Entity {
         this.lastDamageDone = 0;
         this.lastHitTook = 0;
         this.score = score;
+        try {
+            String enemyImage = "assets/enemy_1.png";
+            img = ImageIO.read(
+                    new File(enemyImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void moveToPlayer(Integer playerX, Integer playerY) {
@@ -88,13 +101,22 @@ public class Enemy extends Entity {
 
     @Override
     void paint(Graphics2D graphic) {
+
         if (System.nanoTime() - this.lastHitTook > GamePanel.ONE_SECOND * this.invincibility) {
-            graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+            this.draw(graphic);
         } else {
             if (System.nanoTime() - this.lastInvincibilityRender < GamePanel.ONE_SECOND / 4) {
-                graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
+                this.draw(graphic);
             } else if (System.nanoTime() - this.lastInvincibilityRender > GamePanel.ONE_SECOND / 3)
                 this.lastInvincibilityRender = System.nanoTime();
+        }
+    }
+
+    void draw(Graphics2D graphic) {
+        if (img != null) {
+            graphic.drawImage(img, this.currentX, this.currentY, null);
+        } else {
+            graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
         }
     }
 
