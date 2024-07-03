@@ -1,4 +1,4 @@
-package main;
+package main.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,12 +14,19 @@ import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import main.entities.Enemy;
+import main.entities.Player;
+import main.entities.Projectile;
+import main.input.KeyHandler;
+import main.physics.Collision;
+import main.world.Terrain;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePanel extends JPanel implements Runnable {
 
   static final Integer ORIGINAL_TILESIZE = 16;
-  static final double ONE_SECOND = 1000000000.00;
+  public static final double ONE_SECOND = 1000000000.00;
   static final double FIRE_RATE = 0.25;
   static final Integer SCALE = 3;
   static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;

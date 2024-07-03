@@ -1,4 +1,4 @@
-package main;
+package main.entities;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -8,11 +8,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Projectile extends Entity {
-    String direction;
-    static final String UP = "UP";
-    static final String DOWN = "DOWN";
-    static final String LEFT = "LEFT";
-    static final String RIGHT = "RIGHT";
+    public String direction;
+    public static final String UP = "UP";
+    public static final String DOWN = "DOWN";
+    public static final String LEFT = "LEFT";
+    public static final String RIGHT = "RIGHT";
 
     public Projectile(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
             Integer acceleration, Integer damage, String direction) {
@@ -71,12 +71,12 @@ public class Projectile extends Entity {
     }
 
     @Override
-    String getObjectName() {
+    public String getObjectName() {
         return "Projectile";
     }
 
     @Override
-    void paint(Graphics2D graphic) {
+    public void paint(Graphics2D graphic) {
         if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
         } else {
