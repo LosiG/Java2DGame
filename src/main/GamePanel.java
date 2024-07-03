@@ -155,7 +155,7 @@ public class GamePanel extends JPanel implements Runnable {
       }
 
     }
-    if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 5000) {
+    if (enemies.size() < 100 && System.currentTimeMillis() - lastEnemySpawn > 500) {
       enemies.add(generateRandomEnemy());
       lastEnemySpawn = System.currentTimeMillis();
     }
@@ -172,7 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     collision.checkForCollisions();
 
-    if (player.currentHp == 0) {
+    if (player.currentHp <= 0) {
       gameOver = true;
     }
   }
@@ -209,7 +209,7 @@ public class GamePanel extends JPanel implements Runnable {
     String scoreTitle = "Score: " + score.toString();
     g2.drawString(scoreTitle, 700, 20);
 
-    if (this.player.currentHp == 0) {
+    if (gameOver) {
       BufferedImage base = null;
       try {
         base = ImageIO.read(new File("assets\\gameOverScreen.png"));
