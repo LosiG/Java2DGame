@@ -1,4 +1,4 @@
-package main;
+package main.entities;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -65,12 +65,12 @@ public class Player extends Entity {
     }
 
     @Override
-    String getObjectName() {
+    public String getObjectName() {
         return "Player";
     }
 
     @Override
-    void paint(Graphics2D graphic) {
+    public void paint(Graphics2D graphic) {
 
         paintHpBar(this, graphic);
 

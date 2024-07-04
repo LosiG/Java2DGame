@@ -1,4 +1,4 @@
-package main;
+package main.entities;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -7,9 +7,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.ui.GamePanel;
+
 public class Enemy extends Entity {
 
-    Integer score;
+    public Integer score;
 
     public Enemy(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
             Integer acceleration, int hp, int damage, int score) {
@@ -86,7 +88,7 @@ public class Enemy extends Entity {
     }
 
     @Override
-    String getObjectName() {
+    public String getObjectName() {
         return "Enemy";
     }
 
@@ -100,7 +102,7 @@ public class Enemy extends Entity {
     }
 
     @Override
-    void paint(Graphics2D graphic) {
+    public void paint(Graphics2D graphic) {
 
         if (System.nanoTime() - this.lastHitTook > GamePanel.ONE_SECOND * this.invincibility) {
             this.draw(graphic);
@@ -112,7 +114,7 @@ public class Enemy extends Entity {
         }
     }
 
-    void draw(Graphics2D graphic) {
+    public void draw(Graphics2D graphic) {
         paintHpBar(this, graphic);
         if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);

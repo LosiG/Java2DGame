@@ -1,23 +1,23 @@
-package main;
+package main.entities;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
-    Integer currentX;
-    Integer currentY;
-    Integer spriteY;
-    Integer spriteX;
-    Integer speed;
-    Integer acceleration;
-    Integer maxHp;
-    Integer currentHp;
-    Integer damage;
-    Integer invincibility;
-    long lastInvincibilityRender;
-    long lastHitTook;
-    long lastDamageDone;
-    BufferedImage img;
+    public Integer currentX;
+    public Integer currentY;
+    public Integer spriteY;
+    public Integer spriteX;
+    public Integer speed;
+    public Integer acceleration;
+    public Integer maxHp;
+    public Integer currentHp;
+    public Integer damage;
+    public Integer invincibility;
+    public long lastInvincibilityRender;
+    public long lastHitTook;
+    public long lastDamageDone;
+    public BufferedImage img;
 
     abstract void moveUp(Integer value);
 
@@ -27,9 +27,9 @@ public abstract class Entity {
 
     abstract void moveRight(Integer value);
 
-    abstract String getObjectName();
+    public abstract String getObjectName();
 
-    abstract void paint(java.awt.Graphics2D graphic);
+    public abstract void paint(java.awt.Graphics2D graphic);
 
     <T extends Entity> void paintHpBar(T entity, java.awt.Graphics2D grapich) {
         float currentHpRatio = (float) entity.currentHp / entity.maxHp;

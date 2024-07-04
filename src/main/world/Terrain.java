@@ -1,4 +1,4 @@
-package main;
+package main.world;
 
 import java.awt.Graphics2D;
 
@@ -7,7 +7,7 @@ public class Terrain {
     Integer tileSizeX;
     Integer tileSizeY;
 
-    Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
+    public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
         this.tileSizeX = tileSizeX;
         this.tileSizeY = tileSizeY;
         this.tiles = new Tile[screenRows][screenColumns];
