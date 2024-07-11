@@ -10,6 +10,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Player extends Entity {
+    Integer exp;
+    Integer lvl;
+    Integer strength;
+    Integer dexterity;
 
     public Player(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
             Integer acceleration, int hp) {
@@ -21,6 +25,10 @@ public class Player extends Entity {
         this.acceleration = acceleration;
         this.currentHp = this.maxHp = hp;
         this.invincibility = 1;
+        this.exp = 0;
+        this.lvl = 1;
+        this.strength = 10;
+        this.dexterity = 10;
         try {
             String playerImage = "assets/player.png";
             img = ImageIO.read(
@@ -71,15 +79,21 @@ public class Player extends Entity {
 
     @Override
     public void paint(Graphics2D graphic) {
-
         paintHpBar(this, graphic);
-
         // Draw the body
         if (img != null) {
             graphic.drawImage(img, this.currentX, this.currentY, null);
         } else {
             graphic.fillRect(this.currentX, this.currentY, this.spriteX, this.spriteY);
         }
+    }
 
+    public void levelUp() {
+        this.maxHp += 3;
+        this.currentHp = maxHp;
+        this.strength += 1;
+        this.dexterity += 1;
+        this.lvl += 1;
+        this.exp = 0;
     }
 }
