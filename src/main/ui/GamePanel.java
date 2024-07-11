@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
 
   static final Integer PROJECTILE_WIDTH = 20;
   static final Integer PROJECTILE_HEIGHT = 20;
-  static final Integer PROJECTILE_SPEED = 25;
+  static final Integer PROJECTILE_SPEED = 10;
   static final Integer PROJECTILE_ACCELERATION = 1;
 
   static final Integer PLAYER_HP = 100;
@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Projectile> projectiles = new ArrayList<>();
   ArrayList<Experience> experiences = new ArrayList<>();
   Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
-  Collision collision = new Collision(players, projectiles, enemies);
+  Collision collision = new Collision(players, projectiles, enemies, experiences);
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -117,7 +117,9 @@ public class GamePanel extends JPanel implements Runnable {
     if (pause) {
       return;
     }
-
+    if (player.exp >= 100) {
+      player.levelUp();
+    }
     if (keyH.isUpPressed()) {
       player.moveUp(player.speed * Math.round(player.dexterity / 10f));
     }
@@ -166,7 +168,7 @@ public class GamePanel extends JPanel implements Runnable {
       }
 
     }
-    if (enemies.size() < 100 && System.currentTimeMillis() - lastEnemySpawn > 1000) {
+    if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 1000) {
       enemies.add(generateRandomEnemy());
       lastEnemySpawn = System.currentTimeMillis();
     }
@@ -179,6 +181,14 @@ public class GamePanel extends JPanel implements Runnable {
           projectile.currentX < 0 ||
           projectile.currentY < 0) {
         projectileIterator.remove();
+      }
+    }
+    Iterator<Experience> experiencesIterator = experiences.iterator();
+    while (experiencesIterator.hasNext()) {
+      Experience exp = experiencesIterator.next();
+      if (exp.currentHp <= 0) {
+        player.exp += exp.value;
+        experiencesIterator.remove();
       }
     }
     collision.checkForCollisions();
@@ -219,6 +229,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     String scoreTitle = "Score: " + score.toString();
     g2.drawString(scoreTitle, 700, 20);
+    String playerLvlTitle = "Player lvl: " + player.lvl;
+    g2.drawString(playerLvlTitle, 700, 30);
 
     if (gameOver) {
       BufferedImage base = null;

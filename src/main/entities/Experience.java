@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Experience extends Entity {
-    Integer value;
+    public Integer value;
 
     public Experience(Integer x, Integer y, Integer value) {
         this.currentX = x;
@@ -14,6 +14,8 @@ public class Experience extends Entity {
         this.spriteY = 16;
         this.speed = 1;
         this.acceleration = 1;
+        this.currentHp = this.maxHp = 1;
+        this.invincibility = 1;
 
     }
 
