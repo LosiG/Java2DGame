@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.entities.Enemy;
+import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
 import main.input.KeyHandler;
@@ -62,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
+  ArrayList<Experience> experiences = new ArrayList<>();
   Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
   Collision collision = new Collision(players, projectiles, enemies);
 
@@ -158,6 +160,7 @@ public class GamePanel extends JPanel implements Runnable {
       enemy.moveToPlayer(player.currentX, player.currentY);
       if (enemy.currentHp <= 0) {
         score += enemy.score;
+        experiences.add(new Experience(enemy.currentX, enemy.currentY, 10));
         enemyIterator.remove();
       }
 
@@ -204,9 +207,9 @@ public class GamePanel extends JPanel implements Runnable {
     player.paint(g2);
 
     g2.setColor(Color.RED);
-    enemies.forEach(enemy -> {
-      enemy.paint(g2);
-    });
+    enemies.forEach(enemy -> enemy.paint(g2));
+
+    experiences.forEach(experience -> experience.paint(g2));
 
     g2.setColor(Color.yellow);
     projectiles.forEach(projectile -> projectile.paint(g2));
