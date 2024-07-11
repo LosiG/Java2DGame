@@ -10,10 +10,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Player extends Entity {
-    Integer exp;
-    Integer lvl;
-    Integer strength;
-    Integer dexterity;
+    public Integer exp;
+    public Integer lvl;
+    public Integer strength;
+    public Integer dexterity;
 
     public Player(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
             Integer acceleration, int hp) {

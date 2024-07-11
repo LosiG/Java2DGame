@@ -119,16 +119,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     if (keyH.isUpPressed()) {
-      player.moveUp(player.speed);
+      player.moveUp(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isDownPressed()) {
-      player.moveDown(player.speed);
+      player.moveDown(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isLeftPressed()) {
-      player.moveLeft(player.speed);
+      player.moveLeft(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isRightPressed()) {
-      player.moveRight(player.speed);
+      player.moveRight(player.speed * Math.round(player.dexterity / 10f));
     }
 
     if (keyH.isShootDownPressed() || keyH.isShootLeftPressed() ||
@@ -150,7 +150,8 @@ public class GamePanel extends JPanel implements Runnable {
         projectiles.add(
             new Projectile(
                 player.currentX, player.currentY, PROJECTILE_HEIGHT,
-                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION, PROJECTILE_DMG, direction));
+                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION,
+                PROJECTILE_DMG * Math.round(player.strength / 10f), direction));
         this.lastProjectileAdded = System.nanoTime();
       }
     }
@@ -165,7 +166,7 @@ public class GamePanel extends JPanel implements Runnable {
       }
 
     }
-    if (enemies.size() < 100 && System.currentTimeMillis() - lastEnemySpawn > 500) {
+    if (enemies.size() < 100 && System.currentTimeMillis() - lastEnemySpawn > 1000) {
       enemies.add(generateRandomEnemy());
       lastEnemySpawn = System.currentTimeMillis();
     }
