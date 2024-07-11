@@ -70,22 +70,31 @@ public class Collision {
 
     static <DamageDealer extends Entity, Tank extends Entity> boolean entityCollided(DamageDealer damageDealer,
             Tank tank) {
-        return (((damageDealer.currentX <= tank.currentX
-                && damageDealer.currentX + damageDealer.spriteX >= tank.currentX)
-                || (damageDealer.currentX <= tank.currentX + tank.spriteX
-                        && damageDealer.currentX + damageDealer.spriteX >= tank.currentX + tank.spriteX))
-                || ((tank.currentX <= damageDealer.currentX
-                        && tank.currentX + tank.spriteX >= damageDealer.currentX)
-                        || (tank.currentX <= damageDealer.currentX + damageDealer.spriteX
-                                && tank.currentX + tank.spriteX >= damageDealer.currentX + damageDealer.spriteX)))
-                && (((damageDealer.currentY <= tank.currentY
-                        && damageDealer.currentY + damageDealer.spriteY >= tank.currentY)
-                        || (damageDealer.currentY <= tank.currentY + tank.spriteY
-                                && damageDealer.currentY + damageDealer.spriteY >= tank.currentY + tank.spriteY))
-                        || ((tank.currentY <= damageDealer.currentY
-                                && tank.currentY + tank.spriteY >= damageDealer.currentY)
-                                || (tank.currentY <= damageDealer.currentY + damageDealer.spriteY
-                                        && tank.currentY + tank.spriteY >= damageDealer.currentY
-                                                + damageDealer.spriteY)));
+        Integer tankMinX = tank.currentX;
+        Integer tankMinY = tank.currentY;
+        Integer tankMaxX = tankMinX + tank.spriteX;
+        Integer tankMaxY = tankMinY + tank.spriteY;
+
+        Integer damageDealerMinX = damageDealer.currentX;
+        Integer damageDealerMinY = damageDealer.currentY;
+        Integer damageDealerMaxX = damageDealerMinX + damageDealer.spriteX;
+        Integer damageDealerMaxY = damageDealerMinY + damageDealer.spriteY;
+
+        boolean hasCollidedOnX = ((isFirstBetweenSecondAndThird(tankMinX, damageDealerMinX, damageDealerMaxX))
+                || isFirstBetweenSecondAndThird(tankMaxX, damageDealerMinX, damageDealerMaxX))
+                || (isFirstBetweenSecondAndThird(damageDealerMinX, tankMinX, tankMaxX)
+                        || isFirstBetweenSecondAndThird(damageDealerMaxX, tankMinX, tankMaxX));
+
+        boolean hasCollidedOnY = ((isFirstBetweenSecondAndThird(tankMinY, damageDealerMinY, damageDealerMaxY))
+                || isFirstBetweenSecondAndThird(tankMaxY, damageDealerMinY, damageDealerMaxY))
+                || (isFirstBetweenSecondAndThird(damageDealerMinY, tankMinY, tankMaxY)
+                        || isFirstBetweenSecondAndThird(damageDealerMaxY, tankMinY, tankMaxY));
+
+        return hasCollidedOnX
+                && hasCollidedOnY;
+    }
+
+    public static boolean isFirstBetweenSecondAndThird(Integer a, Integer b, Integer c) {
+        return b <= a && a <= c;
     }
 }
