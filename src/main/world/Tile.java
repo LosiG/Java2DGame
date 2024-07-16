@@ -1,4 +1,4 @@
-package main.world;
+package world;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -23,6 +23,9 @@ public class Tile {
         this.type = type;
         try {
             String tileImage = "assets/" + this.images.getFirst();
+            if (type == "LAVA") {
+                tileImage = "assets/lava_tile.png";
+            }
             img = ImageIO.read(
                     new File(tileImage));
         } catch (IOException e) {

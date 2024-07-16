@@ -1,4 +1,4 @@
-package main.ui;
+package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,12 +14,13 @@ import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import main.entities.Enemy;
-import main.entities.Player;
-import main.entities.Projectile;
-import main.input.KeyHandler;
-import main.physics.Collision;
-import main.world.Terrain;
+import entities.Enemy;
+import entities.Player;
+import entities.Projectile;
+import input.KeyHandler;
+import physics.Collision;
+import world.Terrain;
+import world.Camera;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Projectile> projectiles = new ArrayList<>();
   Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
   Collision collision = new Collision(players, projectiles, enemies);
+  Camera camera = new Camera(players, projectiles, enemies, terrain);
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -181,6 +183,26 @@ public class GamePanel extends JPanel implements Runnable {
 
     if (player.currentHp <= 0) {
       gameOver = true;
+    }
+
+    boolean movingRight = SCREEN_WIDTH - player.currentX < 50;
+    if (movingRight)  {
+      camera.moveEverything(Projectile.LEFT);
+    }
+
+    boolean movingLeft = player.currentX < 50;
+    if (movingLeft)  {
+      camera.moveEverything(Projectile.RIGHT);
+    }
+
+    boolean movingDown = SCREEN_HEIGHT - player.currentY < 50;
+    if (movingDown) {
+      camera.moveEverything(Projectile.DOWN);
+    }
+
+    boolean movingUp = player.currentY < 50;
+    if (movingUp) {
+      camera.moveEverything(Projectile.UP);
     }
   }
 
