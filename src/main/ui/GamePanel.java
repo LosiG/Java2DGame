@@ -204,6 +204,8 @@ public class GamePanel extends JPanel implements Runnable {
     if (movingUp) {
       camera.moveEverything(Projectile.UP);
     }
+
+    terrain.checkMapPos(player);
   }
 
   private Enemy generateRandomEnemy() {
