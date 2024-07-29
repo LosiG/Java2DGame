@@ -5,7 +5,7 @@ import java.util.Random;
 
 import entities.Player;
 import ui.GamePanel;
-import lib.Costants;
+import lib.Constants;
 
 public class Terrain {
     Tile[][] tiles;
@@ -18,6 +18,7 @@ public class Terrain {
     Integer centerMapY = 0;
     Integer xBound = 0;
     Integer yBound = 0;
+    Tile snow;
 
     public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
         this.tileSizeX = tileSizeX;
@@ -29,6 +30,7 @@ public class Terrain {
         xBound = ((screenColumns + MAP_BUFFER * 2 - 2) * tileSizeX)/2;
         yBound = ((screenRows + MAP_BUFFER * 2 - 2) * tileSizeY)/2;
         this.tiles = new Tile[screenRows + MAP_BUFFER * 2][screenColumns + MAP_BUFFER * 2];
+        snow = new Tile(tileSizeX, tileSizeY, "SNOW");
         
         Random r = new Random();
         int low = 1;
@@ -98,25 +100,72 @@ public class Terrain {
         if (lastXPos != null) {
             if (lastXPos >= 0) {
                 System.out.println("Going left");
-                slideMapTiles(0, 2);
+                slideMapTiles(Constants.LEFT);
             }
             if (lastXPos <= 0) {
-                System.out.println("Going right");
-                slideMapTiles(tiles[0].length - 2, tiles[0].length);
+                System.out.println(Constants.RIGHT);
+                slideMapTiles(Constants.RIGHT);
+            }
+        }
+        if (lastYPos != null) {
+            if (lastYPos <= 0) {
+                System.out.println(Constants.UP);
+                slideMapTiles(Constants.UP);
             }
         }
     }
 
-    private void slideMapTiles(int index1, int index2) {
-        for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
-            for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
-                tiles[i][j + MAP_BUFFER] = tiles[i][j];
-                if (i <= MAP_BUFFER || j <= MAP_BUFFER) {
-                    tiles[i][j] = new Tile(tileSizeX, tileSizeY, "SNOW");
+    private void slideMapTiles(String direction) {
+        switch (direction) {
+            case Constants.LEFT:
+                for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
+                    for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
+                        tiles[i][j + MAP_BUFFER] = tiles[i][j];
+                        if (i <= MAP_BUFFER || j <= MAP_BUFFER) {
+                            tiles[i][j] = snow;
+                        }
+                    }
                 }
-            }
+                break;
+            case Constants.RIGHT:
+                for (int i = 0; i < tiles.length; i++) {
+                    for (int j = 0; j < tiles[i].length; j++) {
+                        if (j >= tiles[i].length - MAP_BUFFER) {
+                            tiles[i][j] = snow;
+                        } else {
+                            tiles[i][j] = tiles[i][j + MAP_BUFFER];
+                        }
+                    }
+                }
+            case Constants.UP:
+                for (int i = 0; i < tiles.length - MAP_BUFFER; i++) {
+                    if (i <= MAP_BUFFER) {
+                        for (int j = 0; j < tiles[i].length; j++) {
+                            tiles[i][j] = snow;
+                        }
+                    } else {
+                        System.out.println(i);
+                        for (int j = 0; j < tiles[i].length; j++) {
+                            System.out.println(j);
+                            tiles[i][j] = tiles[i + MAP_BUFFER][j];
+                        }
+                    }
+                }
+                printTiles(tiles);
+                
+            default:
+                break;
         }
         genNewTiles();
+    }
+
+    private void printTiles(Tile[][] tiles) {
+        for (Tile[] row : this.tiles) {
+            for (Tile tile : row) {
+                System.out.print(tile.type);
+            }
+            System.out.println("");
+        }
     }
 
     private void genNewTiles() {

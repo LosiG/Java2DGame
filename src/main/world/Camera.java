@@ -7,7 +7,7 @@ import entities.Entity;
 import entities.Player;
 import entities.Projectile;
 import ui.GamePanel;
-import lib.Costants;
+import lib.Constants;
 
 public class Camera {
     ArrayList<Player> player;
@@ -27,19 +27,19 @@ public class Camera {
     }
 
     public void moveEverything(String direction) {
-        moveEntity(direction, enemies);
-        moveEntity(direction, player);
+        moveEntity(direction, enemies, player.getFirst().speed);
+        moveEntity(direction, player, player.getFirst().speed);
         switch (direction) {
-            case Costants.UP:
+            case Constants.UP:
                 terrain.setYMapPos(player.getFirst().speed);
                 break;
-            case Costants.DOWN:
+            case Constants.DOWN:
                 terrain.setYMapPos(-player.getFirst().speed);
                 break;
-            case Costants.LEFT:
+            case Constants.LEFT:
                 terrain.setXMapPos(-player.getFirst().speed);
                 break;
-            case Costants.RIGHT:
+            case Constants.RIGHT:
                 terrain.setXMapPos(player.getFirst().speed);
                 break;
 
@@ -48,19 +48,19 @@ public class Camera {
         }
     }
 
-    public <Moveable extends Entity> void moveEntity(String direction, ArrayList<Moveable> moveables) {
+    public <Moveable extends Entity> void moveEntity(String direction, ArrayList<Moveable> moveables, Integer speed) {
         for (Moveable moveable : moveables) {
             switch (direction) {
-                case Costants.UP:
+                case Constants.UP:
                     moveable.currentY += moveable.speed;
                     break;
-                case Costants.DOWN:
+                case Constants.DOWN:
                     moveable.currentY -= moveable.speed;
                     break;
-                case Costants.LEFT:
+                case Constants.LEFT:
                     moveable.currentX -= moveable.speed;
                     break;
-                case Costants.RIGHT:
+                case Constants.RIGHT:
                     moveable.currentX += moveable.speed;
                     break;
 
