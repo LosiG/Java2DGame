@@ -120,7 +120,7 @@ public class Terrain {
                 for (int i = tiles.length - 1; i >= 0; i--) {
                     for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
                         tiles[i][j + MAP_BUFFER] = tiles[i][j];
-                        if (i <= MAP_BUFFER || j <= MAP_BUFFER) {
+                        if (j <= MAP_BUFFER) {
                             tiles[i][j] = snow;
                         }
                     }
@@ -143,9 +143,7 @@ public class Terrain {
                             tiles[i][j] = snow;
                         }
                     } else {
-                        System.out.println(i);
                         for (int j = 0; j < tiles[i].length; j++) {
-                            System.out.println(j);
                             tiles[i][j] = tiles[i + MAP_BUFFER][j];
                         }
                     }
