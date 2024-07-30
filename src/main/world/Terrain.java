@@ -98,18 +98,19 @@ public class Terrain {
     public void resetMapPos(Integer lastXPos, Integer lastYPos) {
         if (lastXPos != null) {
             if (lastXPos >= 0) {
-                System.out.println("Going left");
                 slideMapTiles(Constants.LEFT);
             }
             if (lastXPos <= 0) {
-                System.out.println(Constants.RIGHT);
                 slideMapTiles(Constants.RIGHT);
             }
         }
         if (lastYPos != null) {
-            if (lastYPos <= 0) {
-                System.out.println(Constants.UP);
+            if (lastYPos == 0) {
+                System.out.println(lastYPos);
                 slideMapTiles(Constants.UP);
+            }
+            if (lastYPos < 0) {
+                slideMapTiles(Constants.DOWN);
             }
         }
     }
@@ -136,20 +137,34 @@ public class Terrain {
                         }
                     }
                 }
+                break;
+
             case Constants.UP:
-                for (int i = 0; i < tiles.length - MAP_BUFFER; i++) {
-                    if (i <= MAP_BUFFER) {
-                        for (int j = 0; j < tiles[i].length; j++) {
+                for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
+                    for (int j = tiles[i].length - 1; j >= 0; j--) {
+                        tiles[i + MAP_BUFFER][j] = tiles[i][j];
+                        if (i <= MAP_BUFFER) {
                             tiles[i][j] = snow;
                         }
-                    } else {
-                        for (int j = 0; j < tiles[i].length; j++) {
+                    }
+                }
+                printTiles(tiles);
+                break;
+                
+            case Constants.DOWN:
+                System.out.println("Down");
+                for (int i = 0; i < tiles.length; i++) {
+                    for (int j = 0; j < tiles[i].length; j++) {
+                        if (i >= tiles.length - MAP_BUFFER) {
+                            tiles[i][j] = snow;
+                        } else {
                             tiles[i][j] = tiles[i + MAP_BUFFER][j];
                         }
                     }
                 }
                 printTiles(tiles);
-                
+                break;
+
             default:
                 break;
         }
@@ -163,9 +178,9 @@ public class Terrain {
             }
             System.out.println();
         }
-            System.out.println();
-            System.out.println();
-            System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
     private void genNewTiles() {
