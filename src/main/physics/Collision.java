@@ -1,9 +1,11 @@
 package main.physics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import main.entities.Enemy;
 import main.entities.Entity;
+import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
 import main.ui.GamePanel;
@@ -12,18 +14,22 @@ public class Collision {
     ArrayList<Player> player;
     ArrayList<Projectile> projectiles;
     ArrayList<Enemy> enemies;
+    ArrayList<Experience> experiences;
     long lastHitTook = System.nanoTime();
     long lastShotLanded = System.nanoTime();
 
-    public Collision(ArrayList<Player> player, ArrayList<Projectile> projectiles, ArrayList<Enemy> enemies) {
+    public Collision(ArrayList<Player> player, ArrayList<Projectile> projectiles, ArrayList<Enemy> enemies,
+            ArrayList<Experience> experiences) {
         this.enemies = enemies;
         this.player = player;
         this.projectiles = projectiles;
+        this.experiences = experiences;
     }
 
     public void checkForCollisions() {
         entitiesCollided(projectiles, enemies);
         entitiesCollided(enemies, player);
+        entitiesCollided(player, experiences);
     }
 
     public void addEnemies(Enemy enemy) {
@@ -64,9 +70,31 @@ public class Collision {
 
     static <DamageDealer extends Entity, Tank extends Entity> boolean entityCollided(DamageDealer damageDealer,
             Tank tank) {
-        return damageDealer.currentX >= tank.currentX &&
-                damageDealer.currentX <= tank.currentX + tank.spriteX &&
-                damageDealer.currentY >= tank.currentY &&
-                damageDealer.currentY <= tank.currentY + tank.spriteY;
+        Integer tankMinX = tank.currentX;
+        Integer tankMinY = tank.currentY;
+        Integer tankMaxX = tankMinX + tank.spriteX;
+        Integer tankMaxY = tankMinY + tank.spriteY;
+
+        Integer damageDealerMinX = damageDealer.currentX;
+        Integer damageDealerMinY = damageDealer.currentY;
+        Integer damageDealerMaxX = damageDealerMinX + damageDealer.spriteX;
+        Integer damageDealerMaxY = damageDealerMinY + damageDealer.spriteY;
+
+        boolean hasCollidedOnX = ((isFirstBetweenSecondAndThird(tankMinX, damageDealerMinX, damageDealerMaxX))
+                || isFirstBetweenSecondAndThird(tankMaxX, damageDealerMinX, damageDealerMaxX))
+                || (isFirstBetweenSecondAndThird(damageDealerMinX, tankMinX, tankMaxX)
+                        || isFirstBetweenSecondAndThird(damageDealerMaxX, tankMinX, tankMaxX));
+
+        boolean hasCollidedOnY = ((isFirstBetweenSecondAndThird(tankMinY, damageDealerMinY, damageDealerMaxY))
+                || isFirstBetweenSecondAndThird(tankMaxY, damageDealerMinY, damageDealerMaxY))
+                || (isFirstBetweenSecondAndThird(damageDealerMinY, tankMinY, tankMaxY)
+                        || isFirstBetweenSecondAndThird(damageDealerMaxY, tankMinY, tankMaxY));
+
+        return hasCollidedOnX
+                && hasCollidedOnY;
+    }
+
+    public static boolean isFirstBetweenSecondAndThird(Integer a, Integer b, Integer c) {
+        return b <= a && a <= c;
     }
 }

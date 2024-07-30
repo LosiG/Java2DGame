@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.entities.Enemy;
+import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
 import main.input.KeyHandler;
@@ -38,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 
   static final Integer PROJECTILE_WIDTH = 20;
   static final Integer PROJECTILE_HEIGHT = 20;
-  static final Integer PROJECTILE_SPEED = 25;
+  static final Integer PROJECTILE_SPEED = 10;
   static final Integer PROJECTILE_ACCELERATION = 1;
 
   static final Integer PLAYER_HP = 100;
@@ -63,9 +64,10 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Enemy> enemies = new ArrayList<>(Arrays.asList(enemy1, enemy2));
   ArrayList<Player> players = new ArrayList<>(Arrays.asList(player));
   ArrayList<Projectile> projectiles = new ArrayList<>();
+  ArrayList<Experience> experiences = new ArrayList<>();
   Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
-  Collision collision = new Collision(players, projectiles, enemies);
   Camera camera = new Camera(players, projectiles, enemies, terrain);
+  Collision collision = new Collision(players, projectiles, enemies, experiences);
 
   public GamePanel() {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -117,18 +119,20 @@ public class GamePanel extends JPanel implements Runnable {
     if (pause) {
       return;
     }
-
+    if (player.exp >= 100) {
+      player.levelUp();
+    }
     if (keyH.isUpPressed()) {
-      player.moveUp(player.speed);
+      player.moveUp(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isDownPressed()) {
-      player.moveDown(player.speed);
+      player.moveDown(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isLeftPressed()) {
-      player.moveLeft(player.speed);
+      player.moveLeft(player.speed * Math.round(player.dexterity / 10f));
     }
     if (keyH.isRightPressed()) {
-      player.moveRight(player.speed);
+      player.moveRight(player.speed * Math.round(player.dexterity / 10f));
     }
 
     if (keyH.isShootDownPressed() || keyH.isShootLeftPressed() ||
@@ -150,7 +154,8 @@ public class GamePanel extends JPanel implements Runnable {
         projectiles.add(
             new Projectile(
                 player.currentX, player.currentY, PROJECTILE_HEIGHT,
-                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION, PROJECTILE_DMG, direction));
+                PROJECTILE_WIDTH, PROJECTILE_SPEED, PROJECTILE_ACCELERATION,
+                PROJECTILE_DMG * Math.round(player.strength / 10f), direction));
         this.lastProjectileAdded = System.nanoTime();
       }
     }
@@ -160,11 +165,12 @@ public class GamePanel extends JPanel implements Runnable {
       enemy.moveToPlayer(player.currentX, player.currentY);
       if (enemy.currentHp <= 0) {
         score += enemy.score;
+        experiences.add(new Experience(enemy.currentX, enemy.currentY, 10));
         enemyIterator.remove();
       }
 
     }
-    if (enemies.size() < 100 && System.currentTimeMillis() - lastEnemySpawn > 500) {
+    if (enemies.size() < 10 && System.currentTimeMillis() - lastEnemySpawn > 1000) {
       enemies.add(generateRandomEnemy());
       lastEnemySpawn = System.currentTimeMillis();
     }
@@ -177,6 +183,14 @@ public class GamePanel extends JPanel implements Runnable {
           projectile.currentX < 0 ||
           projectile.currentY < 0) {
         projectileIterator.remove();
+      }
+    }
+    Iterator<Experience> experiencesIterator = experiences.iterator();
+    while (experiencesIterator.hasNext()) {
+      Experience exp = experiencesIterator.next();
+      if (exp.currentHp <= 0) {
+        player.exp += exp.value;
+        experiencesIterator.remove();
       }
     }
     collision.checkForCollisions();
@@ -228,9 +242,9 @@ public class GamePanel extends JPanel implements Runnable {
     player.paint(g2);
 
     g2.setColor(Color.RED);
-    enemies.forEach(enemy -> {
-      enemy.paint(g2);
-    });
+    enemies.forEach(enemy -> enemy.paint(g2));
+
+    experiences.forEach(experience -> experience.paint(g2));
 
     g2.setColor(Color.yellow);
     projectiles.forEach(projectile -> projectile.paint(g2));
@@ -239,6 +253,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     String scoreTitle = "Score: " + score.toString();
     g2.drawString(scoreTitle, 700, 20);
+    String playerLvlTitle = "Player lvl: " + player.lvl;
+    g2.drawString(playerLvlTitle, 700, 30);
 
     if (gameOver) {
       BufferedImage base = null;
