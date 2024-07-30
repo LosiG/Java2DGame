@@ -117,7 +117,7 @@ public class Terrain {
     private void slideMapTiles(String direction) {
         switch (direction) {
             case Constants.LEFT:
-                for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
+                for (int i = tiles.length - 1; i >= 0; i--) {
                     for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
                         tiles[i][j + MAP_BUFFER] = tiles[i][j];
                         if (i <= MAP_BUFFER || j <= MAP_BUFFER) {
@@ -161,10 +161,13 @@ public class Terrain {
     private void printTiles(Tile[][] tiles) {
         for (Tile[] row : this.tiles) {
             for (Tile tile : row) {
-                System.out.print(tile.type);
+                System.out.print(tile.type.charAt(0));
             }
-            System.out.println("");
+            System.out.println();
         }
+            System.out.println();
+            System.out.println();
+            System.out.println();
     }
 
     private void genNewTiles() {
