@@ -1,6 +1,8 @@
+package main;
+
 import javax.swing.JFrame;
 
-import ui.GamePanel;
+import main.ui.GamePanel;
 
 public class Main {
 

@@ -1,13 +1,12 @@
-package world;
+package main.world;
 
 import java.util.ArrayList;
 
-import entities.Enemy;
-import entities.Entity;
-import entities.Player;
-import entities.Projectile;
-import ui.GamePanel;
-import lib.Constants;
+import main.entities.Enemy;
+import main.entities.Entity;
+import main.entities.Player;
+import main.entities.Projectile;
+import main.lib.Constants;
 
 public class Camera {
     ArrayList<Player> player;

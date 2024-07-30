@@ -1,11 +1,10 @@
-package world;
+package main.world;
 
 import java.awt.Graphics2D;
 import java.util.Random;
 
-import entities.Player;
-import ui.GamePanel;
-import lib.Constants;
+import main.entities.Player;
+import main.lib.Constants;
 
 public class Terrain {
     Tile[][] tiles;

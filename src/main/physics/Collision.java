@@ -1,12 +1,12 @@
-package physics;
+package main.physics;
 
 import java.util.ArrayList;
 
-import entities.Enemy;
-import entities.Entity;
-import entities.Player;
-import entities.Projectile;
-import ui.GamePanel;
+import main.entities.Enemy;
+import main.entities.Entity;
+import main.entities.Player;
+import main.entities.Projectile;
+import main.ui.GamePanel;
 
 public class Collision {
     ArrayList<Player> player;

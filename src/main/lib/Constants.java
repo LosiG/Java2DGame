@@ -1,4 +1,4 @@
-package lib;
+package main.lib;
 
 public class Constants {
     public static final String UP = "UP";

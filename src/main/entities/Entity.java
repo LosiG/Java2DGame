@@ -1,4 +1,4 @@
-package entities;
+package main.entities;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

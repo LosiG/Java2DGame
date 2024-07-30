@@ -1,4 +1,4 @@
-package ui;
+package main.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,13 +14,13 @@ import java.util.Iterator;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import entities.Enemy;
-import entities.Player;
-import entities.Projectile;
-import input.KeyHandler;
-import physics.Collision;
-import world.Terrain;
-import world.Camera;
+import main.entities.Enemy;
+import main.entities.Player;
+import main.entities.Projectile;
+import main.input.KeyHandler;
+import main.physics.Collision;
+import main.world.Terrain;
+import main.world.Camera;
 
 import java.util.concurrent.ThreadLocalRandom;
 
