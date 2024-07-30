@@ -27,11 +27,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePanel extends JPanel implements Runnable {
 
-  static final Integer ORIGINAL_TILESIZE = 16;
+  static final Integer ORIGINAL_TILE_SIZE = 16;
   public static final double ONE_SECOND = 1000000000.00;
   static final double FIRE_RATE = 0.25;
   static final Integer SCALE = 3;
-  static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;
+  static final Integer TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
   static final Integer MAX_SCREEN_COLUMN = 16;
   static final Integer MAX_SCREEN_ROW = 12;
   static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
@@ -46,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer PROJECTILE_DMG = 10;
   static final Integer MOB_HP = 50;
   static final Integer MOB_DMG = 10;
+
+  static final Integer BORDER_LIMIT = 50;
 
   static final Integer FPS = 60;
 
@@ -199,22 +201,22 @@ public class GamePanel extends JPanel implements Runnable {
       gameOver = true;
     }
 
-    boolean movingRight = SCREEN_WIDTH - player.currentX < 50;
+    boolean movingRight = SCREEN_WIDTH - player.currentX < BORDER_LIMIT;
     if (movingRight)  {
       camera.moveEverything(Projectile.LEFT);
     }
 
-    boolean movingLeft = player.currentX < 50;
+    boolean movingLeft = player.currentX < BORDER_LIMIT;
     if (movingLeft)  {
       camera.moveEverything(Projectile.RIGHT);
     }
 
-    boolean movingDown = SCREEN_HEIGHT - player.currentY < 50;
+    boolean movingDown = SCREEN_HEIGHT - player.currentY < BORDER_LIMIT;
     if (movingDown) {
       camera.moveEverything(Projectile.DOWN);
     }
 
-    boolean movingUp = player.currentY < 50;
+    boolean movingUp = player.currentY < BORDER_LIMIT;
     if (movingUp) {
       camera.moveEverything(Projectile.UP);
     }

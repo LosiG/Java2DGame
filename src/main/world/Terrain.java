@@ -148,7 +148,6 @@ public class Terrain {
                         }
                     }
                 }
-                printTiles(tiles);
                 break;
                 
             case Constants.DOWN:
@@ -162,13 +161,11 @@ public class Terrain {
                         }
                     }
                 }
-                printTiles(tiles);
                 break;
 
             default:
                 break;
         }
-        genNewTiles();
     }
 
     private void printTiles(Tile[][] tiles) {
