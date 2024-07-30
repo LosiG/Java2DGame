@@ -16,7 +16,6 @@ public class Experience extends Entity {
         this.acceleration = 1;
         this.currentHp = this.maxHp = 1;
         this.invincibility = 1;
-
     }
 
     @Override

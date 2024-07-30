@@ -4,16 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import main.Main;
 import main.entities.Enemy;
 import main.entities.Experience;
 import main.entities.Player;
@@ -71,8 +68,8 @@ public class GamePanel extends JPanel implements Runnable {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     this.setBackground(Color.BLACK);
     this.setDoubleBuffered(true);
-    this.addKeyListener(keyH);
     this.setFocusable(true);
+    this.addKeyListener(keyH);
   }
 
   public void startGameThread() {
@@ -233,13 +230,7 @@ public class GamePanel extends JPanel implements Runnable {
     g2.drawString(playerLvlTitle, 700, 30);
 
     if (gameOver) {
-      BufferedImage base = null;
-      try {
-        base = ImageIO.read(new File("assets\\gameOverScreen.png"));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      g2.drawImage(base, null, getFocusCycleRootAncestor());
+      Main.gameOver();
     }
 
     g2.dispose();
