@@ -19,26 +19,6 @@ public class Experience extends Entity {
     }
 
     @Override
-    void moveUp(Integer value) {
-        this.currentY += value;
-    }
-
-    @Override
-    void moveDown(Integer value) {
-        this.currentY -= value;
-    }
-
-    @Override
-    void moveLeft(Integer value) {
-        this.currentX -= value;
-    }
-
-    @Override
-    void moveRight(Integer value) {
-        this.currentX += value;
-    }
-
-    @Override
     public String getObjectName() {
         return "Experience";
     }
