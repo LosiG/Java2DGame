@@ -12,9 +12,11 @@ import javax.swing.JPanel;
 
 import main.Main;
 import main.entities.Enemy;
+import main.entities.Entity;
 import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
+import main.entities.Entity.Direction;
 import main.input.KeyHandler;
 import main.physics.Collision;
 import main.world.Terrain;
@@ -118,32 +120,32 @@ public class GamePanel extends JPanel implements Runnable {
       player.levelUp();
     }
     if (keyH.isUpPressed()) {
-      player.moveUp(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.UP);
     }
     if (keyH.isDownPressed()) {
-      player.moveDown(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.DOWN);
     }
     if (keyH.isLeftPressed()) {
-      player.moveLeft(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.LEFT);
     }
     if (keyH.isRightPressed()) {
-      player.moveRight(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.RIGHT);
     }
 
     if (keyH.isShootDownPressed() || keyH.isShootLeftPressed() ||
         keyH.isShootRightPressed() || keyH.isShootUpPressed()) {
-      String direction = "";
+      Direction direction = null;
       if (keyH.isShootDownPressed()) {
-        direction = Projectile.DOWN;
+        direction = Direction.DOWN;
       }
       if (keyH.isShootUpPressed()) {
-        direction = Projectile.UP;
+        direction = Direction.UP;
       }
       if (keyH.isShootLeftPressed()) {
-        direction = Projectile.LEFT;
+        direction = Direction.LEFT;
       }
       if (keyH.isShootRightPressed()) {
-        direction = Projectile.RIGHT;
+        direction = Direction.RIGHT;
       }
       if (waitForSeconds(lastProjectileAdded, FIRE_RATE)) {
         projectiles.add(
@@ -172,7 +174,7 @@ public class GamePanel extends JPanel implements Runnable {
     Iterator<Projectile> projectileIterator = projectiles.iterator();
     while (projectileIterator.hasNext()) {
       Projectile projectile = projectileIterator.next();
-      projectile.move(projectile.direction);
+      projectile.move();
       if (projectile.currentX > SCREEN_WIDTH ||
           projectile.currentY > SCREEN_HEIGHT ||
           projectile.currentX < 0 ||

@@ -43,48 +43,27 @@ public class Enemy extends Entity {
         Integer deltaY = this.currentY - playerY;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             if (deltaX > 0) {
-                moveLeft(speed);
+                move(speed, Direction.LEFT);
             } else {
-                moveRight(speed);
+                move(speed, Direction.RIGHT);
             }
             if (deltaY > 0) {
-                moveDown(speed / 2);
+                move(speed / 2, Direction.UP);
             } else {
-                moveUp(speed / 2);
+                move(speed / 2, Direction.DOWN);
             }
         } else {
             if (deltaY > 0) {
-                moveDown(speed);
+                move(speed, Direction.UP);
             } else {
-                moveUp(speed);
+                move(speed, Direction.DOWN);
             }
             if (deltaX > 0) {
-                moveLeft(speed / 2);
+                move(speed / 2, Direction.LEFT);
             } else {
-                moveRight(speed / 2);
+                move(speed / 2, Direction.RIGHT);
             }
-
         }
-    }
-
-    @Override
-    void moveUp(Integer value) {
-        this.currentY += value;
-    }
-
-    @Override
-    void moveDown(Integer value) {
-        this.currentY -= value;
-    }
-
-    @Override
-    void moveLeft(Integer value) {
-        this.currentX -= value;
-    }
-
-    @Override
-    void moveRight(Integer value) {
-        this.currentX += value;
     }
 
     @Override

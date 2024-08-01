@@ -8,14 +8,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Projectile extends Entity {
-    public String direction;
-    public static final String UP = "UP";
-    public static final String DOWN = "DOWN";
-    public static final String LEFT = "LEFT";
-    public static final String RIGHT = "RIGHT";
+    public Direction direction;
 
     public Projectile(Integer currentX, Integer currentY, Integer spriteY, Integer spriteX, Integer speed,
-            Integer acceleration, Integer damage, String direction) {
+            Integer acceleration, Integer damage, Direction direction) {
         this.currentX = currentX;
         this.currentY = currentY;
         this.spriteX = spriteX;
@@ -35,39 +31,8 @@ public class Projectile extends Entity {
         }
     }
 
-    public void moveUp(Integer value) {
-        this.currentY -= value;
-    }
-
-    public void moveDown(Integer value) {
-        this.currentY += value;
-    }
-
-    public void moveLeft(Integer value) {
-        this.currentX -= value;
-    }
-
-    public void moveRight(Integer value) {
-        this.currentX += value;
-    }
-
-    public void move(String direction) {
-        switch (direction) {
-            case UP:
-                moveUp(this.speed);
-                break;
-            case DOWN:
-                moveDown(this.speed);
-                break;
-            case LEFT:
-                moveLeft(this.speed);
-                break;
-            case RIGHT:
-                moveRight(this.speed);
-                break;
-            default:
-                break;
-        }
+    public void move() {
+        super.move(this.speed, this.direction);
     }
 
     @Override
