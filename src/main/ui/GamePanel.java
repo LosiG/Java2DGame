@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer MOB_HP = 50;
   static final Integer MOB_DMG = 10;
 
-  static final Integer BORDER_LIMIT = 50;
+  static final Integer BORDER_LIMIT = 48;
 
   static final Integer FPS = 60;
 

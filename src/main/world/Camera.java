@@ -51,16 +51,16 @@ public class Camera {
         for (Moveable moveable : moveables) {
             switch (direction) {
                 case Constants.UP:
-                    moveable.currentY += moveable.speed;
+                    moveable.currentY += speed;
                     break;
                 case Constants.DOWN:
-                    moveable.currentY -= moveable.speed;
+                    moveable.currentY -= speed;
                     break;
                 case Constants.LEFT:
-                    moveable.currentX -= moveable.speed;
+                    moveable.currentX -= speed;
                     break;
                 case Constants.RIGHT:
-                    moveable.currentX += moveable.speed;
+                    moveable.currentX += speed;
                     break;
 
                 default:

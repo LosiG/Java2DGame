@@ -5,6 +5,7 @@ import java.util.Random;
 
 import main.entities.Player;
 import main.lib.Constants;
+import main.ui.GamePanel;
 
 public class Terrain {
     Tile[][] tiles;
@@ -22,12 +23,15 @@ public class Terrain {
     public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
         this.tileSizeX = tileSizeX;
         this.tileSizeY = tileSizeY;
-        xMapPos = screenColumns + MAP_BUFFER * (-tileSizeX);
+        xMapPos = (((screenColumns + MAP_BUFFER * 2) /2) * (-tileSizeX)) + GamePanel.WIDTH;
         yMapPos = screenRows + MAP_BUFFER * (-tileSizeY);
         centerMapX = xMapPos;
         centerMapY = yMapPos;
-        xBound = ((screenColumns + MAP_BUFFER * 2 - 2) * tileSizeX)/2;
-        yBound = ((screenRows + MAP_BUFFER * 2 - 2) * tileSizeY)/2;
+        xBound = (MAP_BUFFER * tileSizeX);
+        yBound = ((screenRows + MAP_BUFFER * 2) * tileSizeY)/2;
+        System.out.println("center" + xMapPos);
+        System.out.println("xbound: " + xBound);
+        System.out.println("diff + " + (-xBound - xMapPos));
         this.tiles = new Tile[screenRows + MAP_BUFFER * 2][screenColumns + MAP_BUFFER * 2];
         snow = new Tile(tileSizeX, tileSizeY, "SNOW");
         
@@ -83,7 +87,7 @@ public class Terrain {
     }
 
     public void checkMapPos(Player player) {
-        if (Math.abs(xMapPos) >= Math.abs(xBound) || xMapPos >= 0) {
+        if (Math.abs(xMapPos) <= Math.abs(xBound) || xMapPos >= 0) {
             Integer lastMapPos = xMapPos;
             xMapPos = centerMapX;
             resetMapPos(lastMapPos, null);
