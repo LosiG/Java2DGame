@@ -11,27 +11,24 @@ public class Terrain {
     Tile[][] tiles;
     Integer tileSizeX;
     Integer tileSizeY;
-    final int MAP_BUFFER = 10;
-    Integer xMapPos = 0;
-    Integer yMapPos = 0;
-    Integer centerMapX = 0;
-    Integer centerMapY = 0;
-    Integer xBound = 0;
-    Integer yBound = 0;
+    final int MAP_BUFFER = 5 * 3;
+    public Integer xMapPos = 0;
+    public Integer yMapPos = 0;
+    public Integer centerX = 0;
+    public Integer centerY = 0;
+    Integer boundLeft = 0;
+    Integer boundRight = 0;
     Tile snow;
 
     public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
         this.tileSizeX = tileSizeX;
         this.tileSizeY = tileSizeY;
-        xMapPos = (((screenColumns + MAP_BUFFER * 2) /2) * (-tileSizeX)) + GamePanel.WIDTH;
-        yMapPos = screenRows + MAP_BUFFER * (-tileSizeY);
-        centerMapX = xMapPos;
-        centerMapY = yMapPos;
-        xBound = (MAP_BUFFER * tileSizeX);
-        yBound = ((screenRows + MAP_BUFFER * 2) * tileSizeY)/2;
-        System.out.println("center" + xMapPos);
-        System.out.println("xbound: " + xBound);
-        System.out.println("diff + " + (-xBound - xMapPos));
+        xMapPos = MAP_BUFFER * -tileSizeX;
+        yMapPos = MAP_BUFFER * -tileSizeY;
+        centerX = xMapPos;
+        centerY = yMapPos;
+        boundLeft = MAP_BUFFER / 3 * -tileSizeX;
+        // boundRight = xMapPos * 2 + bound;
         this.tiles = new Tile[screenRows + MAP_BUFFER * 2][screenColumns + MAP_BUFFER * 2];
         snow = new Tile(tileSizeX, tileSizeY, "SNOW");
         
@@ -57,7 +54,6 @@ public class Terrain {
                 this.tiles = new Tile[screenColumns][screenRows];
                 break;
         }
-
     }
 
     public void paint(Graphics2D graphic) {
@@ -66,6 +62,7 @@ public class Terrain {
 
         for (Tile[] tilesRow : tiles) {
             currentX = xMapPos;
+            
             for (Tile tile : tilesRow) {
                     tile.paint(graphic, currentX, currentY);
                     currentX += this.tileSizeX;
@@ -87,51 +84,50 @@ public class Terrain {
     }
 
     public void checkMapPos(Player player) {
-        if (Math.abs(xMapPos) <= Math.abs(xBound) || xMapPos >= 0) {
-            Integer lastMapPos = xMapPos;
-            xMapPos = centerMapX;
-            resetMapPos(lastMapPos, null);
+        if (xMapPos >= boundLeft) {
+            xMapPos = centerX;
+            resetMapPos(Constants.RIGHT);
         }
-        if (Math.abs(yMapPos) >= Math.abs(yBound) || yMapPos >= 0) {
-            Integer lastMapPos = yMapPos;
-            yMapPos = centerMapY;
-            resetMapPos(null, lastMapPos);
-        }
+        //     System.out.println(xMapPos);
+        //     System.out.println(boundRight);
+            // System.exit(0);gcc
+        // if (Math.abs(xMapPos) >= Math.abs(boundRight)){
+        //     System.out.println("We go right");
+        //     xMapPos = -bound;
+        //     resetMapPos(Constants.LEFT);
+        // }
+        // if (Math.abs(yMapPos) >= Math.abs(bound)) {
+        //     Integer lastMapPos = yMapPos;
+        //     yMapPos = bound * 2;
+        //     resetMapPos(null, lastMapPos);
+        // }
     }
 
-    public void resetMapPos(Integer lastXPos, Integer lastYPos) {
-        if (lastXPos != null) {
-            if (lastXPos >= 0) {
-                slideMapTiles(Constants.LEFT);
-            }
-            if (lastXPos <= 0) {
-                slideMapTiles(Constants.RIGHT);
-            }
-        }
-        if (lastYPos != null) {
-            if (lastYPos == 0) {
-                System.out.println(lastYPos);
-                slideMapTiles(Constants.UP);
-            }
-            if (lastYPos < 0) {
-                slideMapTiles(Constants.DOWN);
-            }
-        }
+    public void resetMapPos(String direction) {
+        slideMapTiles(direction);
+        // if (lastYPos != null) {
+        //     if (lastYPos == 0) {
+        //         slideMapTiles(Constants.UP);
+        //     }
+        //     if (lastYPos < 0) {
+        //         slideMapTiles(Constants.DOWN);
+        //     }
+        // }
     }
 
     private void slideMapTiles(String direction) {
         switch (direction) {
-            case Constants.LEFT:
+            case Constants.RIGHT:
                 for (int i = tiles.length - 1; i >= 0; i--) {
                     for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
-                        tiles[i][j + MAP_BUFFER] = tiles[i][j];
+                        tiles[i][j + MAP_BUFFER * 2 / 3] = tiles[i][j];
                         if (j <= MAP_BUFFER) {
                             tiles[i][j] = snow;
                         }
                     }
                 }
                 break;
-            case Constants.RIGHT:
+            case Constants.LEFT:
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (j >= tiles[i].length - MAP_BUFFER) {
@@ -155,7 +151,6 @@ public class Terrain {
                 break;
                 
             case Constants.DOWN:
-                System.out.println("Down");
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (i >= tiles.length - MAP_BUFFER) {
@@ -174,6 +169,7 @@ public class Terrain {
 
     private void printTiles(Tile[][] tiles) {
         for (Tile[] row : this.tiles) {
+            System.out.print("Cols: " + (row.length - 1)  + " ");
             for (Tile tile : row) {
                 System.out.print(tile.type.charAt(0));
             }

@@ -34,8 +34,8 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
   static final Integer MAX_SCREEN_COLUMN = 16;
   static final Integer MAX_SCREEN_ROW = 12;
-  static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
-  static final Integer SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
+  public static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
+  public static final Integer SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
 
   static final Integer PROJECTILE_WIDTH = 20;
   static final Integer PROJECTILE_HEIGHT = 20;
@@ -257,6 +257,8 @@ public class GamePanel extends JPanel implements Runnable {
     g2.drawString(scoreTitle, 700, 20);
     String playerLvlTitle = "Player lvl: " + player.lvl;
     g2.drawString(playerLvlTitle, 700, 30);
+    g2.drawString("X: " + terrain.xMapPos, 700, 40);
+    g2.drawString("Y: " + terrain.yMapPos, 700, 50);
 
     if (gameOver) {
       BufferedImage base = null;
