@@ -18,6 +18,8 @@ public class Terrain {
     public Integer centerY = 0;
     Integer boundLeft = 0;
     Integer boundRight = 0;
+    Integer boundUp = 0;
+    Integer boundDown = 0;
     Tile snow;
 
     public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
@@ -31,7 +33,9 @@ public class Terrain {
         centerY = yMapPos;
         boundLeft = MAP_BUFFER / 3 * -tileSizeX;
         boundRight = ((colNum - 1 - MAP_BUFFER * 4 / 3) * -tileSizeX);
-        // boundRight = xMapPos * 2 + bound;
+        boundUp = MAP_BUFFER / 3 * -tileSizeY;
+        boundDown = ((rowNum - 1 - MAP_BUFFER * 4 / 3) * -tileSizeY);
+        
         this.tiles = new Tile[rowNum][colNum];
         snow = new Tile(tileSizeX, tileSizeY, "SNOW");
         
@@ -89,14 +93,23 @@ public class Terrain {
     public void checkMapPos(Player player) {
         if (xMapPos >= boundLeft) {
             xMapPos = centerX;
-            System.out.println(boundLeft);
             resetMapPos(Constants.RIGHT);
         }
         
         if (xMapPos <= boundRight) {
             xMapPos = centerX;
-            System.out.println(boundRight);
             resetMapPos(Constants.LEFT);
+        }
+
+        if (yMapPos >= boundUp) {
+            yMapPos = centerY;
+            resetMapPos(Constants.DOWN);
+        }
+        
+        if (yMapPos <= boundDown) {
+            yMapPos = centerY;
+            System.out.println(boundDown);
+            resetMapPos(Constants.UP);
         }
     }
 
@@ -128,10 +141,10 @@ public class Terrain {
                 }
                 break;
 
-            case Constants.UP:
+            case Constants.DOWN:
                 for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
                     for (int j = tiles[i].length - 1; j >= 0; j--) {
-                        tiles[i + MAP_BUFFER][j] = tiles[i][j];
+                        tiles[i + MAP_BUFFER * 2/3][j] = tiles[i][j];
                         if (i <= MAP_BUFFER) {
                             tiles[i][j] = snow;
                         }
@@ -139,13 +152,13 @@ public class Terrain {
                 }
                 break;
                 
-            case Constants.DOWN:
+            case Constants.UP:
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (i >= tiles.length - MAP_BUFFER) {
                             tiles[i][j] = snow;
                         } else {
-                            tiles[i][j] = tiles[i + MAP_BUFFER][j];
+                            tiles[i][j] = tiles[i + MAP_BUFFER * 2/3][j];
                         }
                     }
                 }
@@ -167,8 +180,5 @@ public class Terrain {
         System.out.println();
         System.out.println();
         System.out.println();
-    }
-
-    private void genNewTiles() {
     }
 }
