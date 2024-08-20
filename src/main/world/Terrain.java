@@ -23,13 +23,16 @@ public class Terrain {
     public Terrain(Integer screenColumns, Integer screenRows, String type, Integer tileSizeX, Integer tileSizeY) {
         this.tileSizeX = tileSizeX;
         this.tileSizeY = tileSizeY;
+        Integer rowNum = screenRows + MAP_BUFFER * 2;
+        Integer colNum = screenColumns + MAP_BUFFER * 2;
         xMapPos = MAP_BUFFER * -tileSizeX;
         yMapPos = MAP_BUFFER * -tileSizeY;
         centerX = xMapPos;
         centerY = yMapPos;
         boundLeft = MAP_BUFFER / 3 * -tileSizeX;
+        boundRight = ((colNum - 1 - MAP_BUFFER * 4 / 3) * -tileSizeX);
         // boundRight = xMapPos * 2 + bound;
-        this.tiles = new Tile[screenRows + MAP_BUFFER * 2][screenColumns + MAP_BUFFER * 2];
+        this.tiles = new Tile[rowNum][colNum];
         snow = new Tile(tileSizeX, tileSizeY, "SNOW");
         
         Random r = new Random();
@@ -37,8 +40,8 @@ public class Terrain {
         int high = 100;
         switch (type) {
             case "GRASS":
-                for (int i = 0; i < screenRows + MAP_BUFFER * 2; i++) {
-                    for (int j = 0; j < screenColumns + MAP_BUFFER * 2; j++) {
+                for (int i = 0; i < rowNum; i++) {
+                    for (int j = 0; j < colNum; j++) {
                         int result = r.nextInt(high - low) + low;
                         if (result < 90) {
                             type = "GRASS";
@@ -86,33 +89,19 @@ public class Terrain {
     public void checkMapPos(Player player) {
         if (xMapPos >= boundLeft) {
             xMapPos = centerX;
+            System.out.println(boundLeft);
             resetMapPos(Constants.RIGHT);
         }
-        //     System.out.println(xMapPos);
-        //     System.out.println(boundRight);
-            // System.exit(0);gcc
-        // if (Math.abs(xMapPos) >= Math.abs(boundRight)){
-        //     System.out.println("We go right");
-        //     xMapPos = -bound;
-        //     resetMapPos(Constants.LEFT);
-        // }
-        // if (Math.abs(yMapPos) >= Math.abs(bound)) {
-        //     Integer lastMapPos = yMapPos;
-        //     yMapPos = bound * 2;
-        //     resetMapPos(null, lastMapPos);
-        // }
+        
+        if (xMapPos <= boundRight) {
+            xMapPos = centerX;
+            System.out.println(boundRight);
+            resetMapPos(Constants.LEFT);
+        }
     }
 
     public void resetMapPos(String direction) {
         slideMapTiles(direction);
-        // if (lastYPos != null) {
-        //     if (lastYPos == 0) {
-        //         slideMapTiles(Constants.UP);
-        //     }
-        //     if (lastYPos < 0) {
-        //         slideMapTiles(Constants.DOWN);
-        //     }
-        // }
     }
 
     private void slideMapTiles(String direction) {
@@ -133,7 +122,7 @@ public class Terrain {
                         if (j >= tiles[i].length - MAP_BUFFER) {
                             tiles[i][j] = snow;
                         } else {
-                            tiles[i][j] = tiles[i][j + MAP_BUFFER];
+                            tiles[i][j] = tiles[i][j + MAP_BUFFER * 2/3];
                         }
                     }
                 }
