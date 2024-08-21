@@ -16,7 +16,7 @@ import main.entities.Entity;
 import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
-import main.entities.Entity.Direction;
+import main.lib.Constants.Direction;
 import main.input.KeyHandler;
 import main.lib.Constants;
 import main.physics.Collision;
@@ -203,22 +203,22 @@ public class GamePanel extends JPanel implements Runnable {
 
     boolean movingRight = SCREEN_WIDTH - player.currentX < BORDER_LIMIT;
     if (movingRight)  {
-      camera.moveEverything(Constants.LEFT);
+      camera.moveEverything(Direction.LEFT);
     }
 
     boolean movingLeft = player.currentX < BORDER_LIMIT;
     if (movingLeft)  {
-      camera.moveEverything(Constants.RIGHT);
+      camera.moveEverything(Direction.RIGHT);
     }
 
     boolean movingDown = SCREEN_HEIGHT - player.currentY < BORDER_LIMIT;
     if (movingDown) {
-      camera.moveEverything(Constants.DOWN);
+      camera.moveEverything(Direction.DOWN);
     }
 
     boolean movingUp = player.currentY < BORDER_LIMIT;
     if (movingUp) {
-      camera.moveEverything(Constants.UP);
+      camera.moveEverything(Direction.UP);
     }
 
     terrain.checkMapPos(player);

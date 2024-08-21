@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.util.Random;
 import main.entities.Player;
 import main.lib.Constants;
+import main.lib.Constants.Direction;
 
 public class Terrain {
     Tile[][] tiles;
@@ -78,28 +79,28 @@ public class Terrain {
     public void checkMapPos(Player player) {
         if (xMapPos >= boundLeft) {
             xMapPos = centerX;
-            slideMapTiles(Constants.RIGHT);
+            slideMapTiles(Direction.RIGHT);
         }
 
         if (xMapPos <= boundRight) {
             xMapPos = centerX;
-            slideMapTiles(Constants.LEFT);
+            slideMapTiles(Direction.LEFT);
         }
 
         if (yMapPos >= boundUp) {
             yMapPos = centerY;
-            slideMapTiles(Constants.DOWN);
+            slideMapTiles(Direction.DOWN);
         }
 
         if (yMapPos <= boundDown) {
             yMapPos = centerY;
-            slideMapTiles(Constants.UP);
+            slideMapTiles(Direction.UP);
         }
     }
 
-    private void slideMapTiles(String direction) {
+    private void slideMapTiles(Direction direction) {
         switch (direction) {
-            case Constants.RIGHT:
+            case Direction.RIGHT:
                 for (int i = tiles.length - 1; i >= 0; i--) {
                     for (int j = tiles[i].length - 1 - MAP_BUFFER; j >= 0; j--) {
                         tiles[i][j + MAP_BUFFER * 2 / 3] = tiles[i][j];
@@ -110,7 +111,7 @@ public class Terrain {
                 }
                 break;
 
-            case Constants.LEFT:
+            case Direction.LEFT:
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (j >= tiles[i].length - MAP_BUFFER) {
@@ -122,7 +123,7 @@ public class Terrain {
                 }
                 break;
 
-            case Constants.DOWN:
+            case Direction.DOWN:
                 for (int i = tiles.length - 1 - MAP_BUFFER; i >= 0; i--) {
                     for (int j = tiles[i].length - 1; j >= 0; j--) {
                         tiles[i + MAP_BUFFER * 2 / 3][j] = tiles[i][j];
@@ -133,7 +134,7 @@ public class Terrain {
                 }
                 break;
 
-            case Constants.UP:
+            case Direction.UP:
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (i >= tiles.length - MAP_BUFFER) {

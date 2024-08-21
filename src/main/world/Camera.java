@@ -7,7 +7,7 @@ import main.entities.Entity;
 import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
-import main.lib.Constants;
+import main.lib.Constants.Direction;
 
 public class Camera {
     ArrayList<Player> player;
@@ -29,21 +29,21 @@ public class Camera {
         this.terrain = terrain;
     }
 
-    public void moveEverything(String direction) {
+    public void moveEverything(Direction direction) {
         moveEntity(direction, enemies, player.getFirst().speed);
         moveEntity(direction, player, player.getFirst().speed);
         moveEntity(direction, experiences, player.getFirst().speed);
         switch (direction) {
-            case Constants.UP:
+            case Direction.UP:
                 terrain.setYMapPos(player.getFirst().speed);
                 break;
-            case Constants.DOWN:
+            case Direction.DOWN:
                 terrain.setYMapPos(-player.getFirst().speed);
                 break;
-            case Constants.LEFT:
+            case Direction.LEFT:
                 terrain.setXMapPos(-player.getFirst().speed);
                 break;
-            case Constants.RIGHT:
+            case Direction.RIGHT:
                 terrain.setXMapPos(player.getFirst().speed);
                 break;
 
@@ -52,19 +52,19 @@ public class Camera {
         }
     }
 
-    public <Moveable extends Entity> void moveEntity(String direction, ArrayList<Moveable> moveables, Integer speed) {
+    public <Moveable extends Entity> void moveEntity(Direction direction, ArrayList<Moveable> moveables, Integer speed) {
         for (Moveable moveable : moveables) {
             switch (direction) {
-                case Constants.UP:
+                case Direction.UP:
                     moveable.currentY += speed;
                     break;
-                case Constants.DOWN:
+                case Direction.DOWN:
                     moveable.currentY -= speed;
                     break;
-                case Constants.LEFT:
+                case Direction.LEFT:
                     moveable.currentX -= speed;
                     break;
-                case Constants.RIGHT:
+                case Direction.RIGHT:
                     moveable.currentX += speed;
                     break;
 

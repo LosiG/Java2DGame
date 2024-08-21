@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.lib.Constants.Direction;
+
 public class Projectile extends Entity {
     public Direction direction;
 

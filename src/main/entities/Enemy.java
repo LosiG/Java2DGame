@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.ui.GamePanel;
+import main.lib.Constants.Direction;
 
 public class Enemy extends Entity {
 
