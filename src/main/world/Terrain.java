@@ -41,18 +41,10 @@ public class Terrain {
         lava = new Tile(tileSizeX, tileSizeY, Constants.LAVA);
         grass = new Tile(tileSizeX, tileSizeY, Constants.GRASS);
         
-        switch (type) {
-            case "GRASS":
-                for (int i = 0; i < rowNum; i++) {
-                    for (int j = 0; j < colNum; j++) {
-                        tiles[i][j] = getRandomTile();
-                    }
-                }
-                break;
-
-            default:
-                this.tiles = new Tile[screenColumns][screenRows];
-                break;
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < colNum; j++) {
+                tiles[i][j] = getRandomTile();
+            }
         }
     }
 
