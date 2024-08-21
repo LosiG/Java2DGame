@@ -19,13 +19,32 @@ public abstract class Entity {
     public long lastDamageDone;
     public BufferedImage img;
 
-    abstract void moveUp(Integer value);
+    public enum Direction {
+        LEFT,
+        UP,
+        RIGHT,
+        DOWN
+    }
 
-    abstract void moveDown(Integer value);
-
-    abstract void moveLeft(Integer value);
-
-    abstract void moveRight(Integer value);
+    public void move(Integer value, Direction direction) {
+        switch (direction) {
+            case Direction.LEFT:
+                this.currentX -= value;
+                break;
+            case Direction.UP:
+                this.currentY -= value;
+                break;
+            case Direction.RIGHT:
+                this.currentX += value;
+                break;
+            case Direction.DOWN:
+                this.currentY += value;
+                break;
+            default:
+                System.out.println("How TF did u end down here");
+                break;
+        }
+    }
 
     public abstract String getObjectName();
 

@@ -16,27 +16,6 @@ public class Experience extends Entity {
         this.acceleration = 1;
         this.currentHp = this.maxHp = 1;
         this.invincibility = 1;
-
-    }
-
-    @Override
-    void moveUp(Integer value) {
-        this.currentY += value;
-    }
-
-    @Override
-    void moveDown(Integer value) {
-        this.currentY -= value;
-    }
-
-    @Override
-    void moveLeft(Integer value) {
-        this.currentX -= value;
-    }
-
-    @Override
-    void moveRight(Integer value) {
-        this.currentX += value;
     }
 
     @Override

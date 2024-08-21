@@ -4,20 +4,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import main.Main;
 import main.entities.Enemy;
+import main.entities.Entity;
 import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
+import main.entities.Entity.Direction;
 import main.input.KeyHandler;
 import main.physics.Collision;
 import main.world.Terrain;
@@ -75,8 +74,8 @@ public class GamePanel extends JPanel implements Runnable {
     this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     this.setBackground(Color.BLACK);
     this.setDoubleBuffered(true);
-    this.addKeyListener(keyH);
     this.setFocusable(true);
+    this.addKeyListener(keyH);
   }
 
   public void startGameThread() {
@@ -125,32 +124,32 @@ public class GamePanel extends JPanel implements Runnable {
       player.levelUp();
     }
     if (keyH.isUpPressed()) {
-      player.moveUp(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.UP);
     }
     if (keyH.isDownPressed()) {
-      player.moveDown(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.DOWN);
     }
     if (keyH.isLeftPressed()) {
-      player.moveLeft(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.LEFT);
     }
     if (keyH.isRightPressed()) {
-      player.moveRight(player.speed * Math.round(player.dexterity / 10f));
+      player.move(Direction.RIGHT);
     }
 
     if (keyH.isShootDownPressed() || keyH.isShootLeftPressed() ||
         keyH.isShootRightPressed() || keyH.isShootUpPressed()) {
-      String direction = "";
+      Direction direction = null;
       if (keyH.isShootDownPressed()) {
-        direction = Projectile.DOWN;
+        direction = Direction.DOWN;
       }
       if (keyH.isShootUpPressed()) {
-        direction = Projectile.UP;
+        direction = Direction.UP;
       }
       if (keyH.isShootLeftPressed()) {
-        direction = Projectile.LEFT;
+        direction = Direction.LEFT;
       }
       if (keyH.isShootRightPressed()) {
-        direction = Projectile.RIGHT;
+        direction = Direction.RIGHT;
       }
       if (waitForSeconds(lastProjectileAdded, FIRE_RATE)) {
         projectiles.add(
@@ -179,7 +178,7 @@ public class GamePanel extends JPanel implements Runnable {
     Iterator<Projectile> projectileIterator = projectiles.iterator();
     while (projectileIterator.hasNext()) {
       Projectile projectile = projectileIterator.next();
-      projectile.move(projectile.direction);
+      projectile.move();
       if (projectile.currentX > SCREEN_WIDTH ||
           projectile.currentY > SCREEN_HEIGHT ||
           projectile.currentX < 0 ||
@@ -259,13 +258,7 @@ public class GamePanel extends JPanel implements Runnable {
     g2.drawString(playerLvlTitle, 700, 30);
 
     if (gameOver) {
-      BufferedImage base = null;
-      try {
-        base = ImageIO.read(new File("assets\\gameOverScreen.png"));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      g2.drawImage(base, null, getFocusCycleRootAncestor());
+      Main.gameOver();
     }
 
     g2.dispose();

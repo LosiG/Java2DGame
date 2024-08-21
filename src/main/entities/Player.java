@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.ui.GamePanel;
-
 public class Player extends Entity {
     public Integer exp;
     public Integer lvl;
@@ -39,24 +37,12 @@ public class Player extends Entity {
         }
     }
 
+    public void move(Direction direction){
+        move(this.getMovementSpeed(), direction);
+    }
+
     public Integer getMovementSpeed() {
-        return this.speed * this.acceleration;
-    }
-
-    public void moveUp(Integer value) {
-        this.currentY -= value;
-    }
-
-    public void moveDown(Integer value) {
-        this.currentY += value;
-    }
-
-    public void moveLeft(Integer value) {
-        this.currentX -= value;
-    }
-
-    public void moveRight(Integer value) {
-        this.currentX += value;
+        return this.speed * Math.round(this.dexterity / 10f);
     }
 
     public int getPlayerPosX() {
