@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import main.lib.Constants;
+
 public class Tile {
     List<String> images;
     Integer sizeX;
@@ -23,6 +25,12 @@ public class Tile {
         this.type = type;
         try {
             String tileImage = "assets/" + this.images.getFirst();
+            if (type == Constants.LAVA) {
+                tileImage = "assets/lava_tile.png";
+            }
+            if (type == Constants.SNOW) {
+                tileImage = "assets/snow_tile.png";
+            }
             img = ImageIO.read(
                     new File(tileImage));
         } catch (IOException e) {

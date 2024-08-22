@@ -16,20 +16,22 @@ import main.entities.Entity;
 import main.entities.Experience;
 import main.entities.Player;
 import main.entities.Projectile;
-import main.entities.Entity.Direction;
+import main.lib.Constants.Direction;
 import main.input.KeyHandler;
+import main.lib.Constants;
 import main.physics.Collision;
 import main.world.Terrain;
+import main.world.Camera;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GamePanel extends JPanel implements Runnable {
 
-  static final Integer ORIGINAL_TILESIZE = 16;
+  static final Integer ORIGINAL_TILE_SIZE = 16;
   public static final double ONE_SECOND = 1000000000.00;
   static final double FIRE_RATE = 0.25;
   static final Integer SCALE = 3;
-  static final Integer TILE_SIZE = ORIGINAL_TILESIZE * SCALE;
+  static final Integer TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
   static final Integer MAX_SCREEN_COLUMN = 16;
   static final Integer MAX_SCREEN_ROW = 12;
   static final Integer SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COLUMN;
@@ -44,6 +46,8 @@ public class GamePanel extends JPanel implements Runnable {
   static final Integer PROJECTILE_DMG = 10;
   static final Integer MOB_HP = 50;
   static final Integer MOB_DMG = 10;
+
+  static final Integer BORDER_LIMIT = 48;
 
   static final Integer FPS = 60;
 
@@ -64,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
   ArrayList<Projectile> projectiles = new ArrayList<>();
   ArrayList<Experience> experiences = new ArrayList<>();
   Terrain terrain = new Terrain(MAX_SCREEN_COLUMN, MAX_SCREEN_ROW, "GRASS", TILE_SIZE, TILE_SIZE);
+  Camera camera = new Camera(players, projectiles, enemies, terrain, experiences);
   Collision collision = new Collision(players, projectiles, enemies, experiences);
 
   public GamePanel() {
@@ -195,6 +200,28 @@ public class GamePanel extends JPanel implements Runnable {
     if (player.currentHp <= 0) {
       gameOver = true;
     }
+
+    boolean movingRight = SCREEN_WIDTH - player.currentX < BORDER_LIMIT;
+    if (movingRight)  {
+      camera.moveEverything(Direction.LEFT);
+    }
+
+    boolean movingLeft = player.currentX < BORDER_LIMIT;
+    if (movingLeft)  {
+      camera.moveEverything(Direction.RIGHT);
+    }
+
+    boolean movingDown = SCREEN_HEIGHT - player.currentY < BORDER_LIMIT;
+    if (movingDown) {
+      camera.moveEverything(Direction.DOWN);
+    }
+
+    boolean movingUp = player.currentY < BORDER_LIMIT;
+    if (movingUp) {
+      camera.moveEverything(Direction.UP);
+    }
+
+    terrain.checkMapPos(player);
   }
 
   private Enemy generateRandomEnemy() {

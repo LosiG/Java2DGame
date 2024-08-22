@@ -3,6 +3,8 @@ package main.entities;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import main.lib.Constants.Direction;
+
 public abstract class Entity {
     public Integer currentX;
     public Integer currentY;
@@ -19,12 +21,6 @@ public abstract class Entity {
     public long lastDamageDone;
     public BufferedImage img;
 
-    public enum Direction {
-        LEFT,
-        UP,
-        RIGHT,
-        DOWN
-    }
 
     public void move(Integer value, Direction direction) {
         switch (direction) {

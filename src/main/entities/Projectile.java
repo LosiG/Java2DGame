@@ -1,11 +1,12 @@
 package main.entities;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import main.lib.Constants.Direction;
 
 public class Projectile extends Entity {
     public Direction direction;

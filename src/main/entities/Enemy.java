@@ -1,13 +1,13 @@
 package main.entities;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import main.ui.GamePanel;
+import main.lib.Constants.Direction;
 
 public class Enemy extends Entity {
 
